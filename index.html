@@ -1,405 +1,193 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Дизайн эксперимента v2.0 — СДУ-модель</title>
-<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]}};</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" async></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#1A3C8B;--red:#C41E3A;--orange:#E87722;--green:#2E7D32;--dark:#1E2A3A;--gray:#6B7B8D;--light:#F4F6F9;--blue-bg:#E8EEF7;--orange-bg:#FFF3E0;--green-bg:#E8F5E9;--red-bg:#FFEBEE;--purple:#5C6BC0;--purple-bg:#EDE7F6}
-body{font-family:'PT Sans',sans-serif;background:#fff;color:var(--dark);max-width:920px;margin:0 auto;padding:32px 24px;line-height:1.6}
-h1{font-size:24px;color:var(--navy);border-bottom:3px solid var(--red);padding-bottom:8px;margin-bottom:6px}
-h1 span{font-size:14px;color:var(--gray);font-weight:400}
-h2{font-size:18px;color:var(--navy);margin:28px 0 12px;padding:6px 12px;background:var(--blue-bg);border-left:4px solid var(--navy);border-radius:0 3px 3px 0}
-.mono{font-family:'JetBrains Mono',monospace}
-.small{font-size:12px;color:var(--gray)}
-.step{display:flex;gap:0;margin:12px 0;border:1px solid #D0D8E4;border-radius:4px;overflow:hidden}
-.step-num{flex:0 0 48px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
-.step-desc{flex:1;padding:12px 16px;font-size:13px;border-right:1px solid #E0E0E0}
-.step-desc strong{color:var(--navy);font-size:14px}
-.step-formula{flex:0 0 380px;padding:12px 16px;background:var(--light);font-size:13px}
-.step-formula .f{font-family:'JetBrains Mono',monospace;font-size:12px;color:#1A237E;background:#fff;border:1px solid #C8D6E5;border-radius:3px;padding:6px 10px;margin:4px 0;display:block}
-.phase{margin:20px 0 8px;padding:8px 16px;font-size:15px;font-weight:700;color:#fff;border-radius:4px}
-.phase-setup{background:#546E7A}
-.phase-calibration{background:var(--purple)}
-.phase-run{background:var(--navy)}
-.phase-measure{background:var(--orange)}
-.phase-decide{background:var(--green)}
-.phase-sensitivity{background:#7B1FA2}
-.phase-validate{background:#00695C}
-.note{font-size:12px;color:var(--gray);padding:4px 0 0;font-style:italic}
-.tag{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;margin-right:4px}
-.tag-var{background:var(--orange-bg);color:var(--orange);border:1px solid #FFCC80}
-.tag-fix{background:var(--blue-bg);color:var(--navy);border:1px solid #90CAF9}
-.tag-out{background:var(--green-bg);color:var(--green);border:1px solid #A5D6A7}
-.tag-method{background:var(--purple-bg);color:var(--purple);border:1px solid #CE93D8}
-.tag-data{background:#E0F2F1;color:#00695C;border:1px solid #80CBC4}
-.legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;padding:10px 16px;background:var(--light);border-radius:4px;font-size:12px}
-.arrow{text-align:center;font-size:20px;color:var(--navy);margin:4px 0}
-@media print{body{max-width:100%;padding:16px}}
-</style>
-</head>
-<body>
+<section id="methodology-H1">
+  <h2>Методика проверки гипотезы H₁</h2>
 
-<h1>Дизайн эксперимента и методика проверки гипотезы $H_1$<br><span>DIPLOMA v2.0 | СДУ Эйлера–Маруямы | ветка newresearch</span></h1>
+  <h3>Объект и предмет исследования</h3>
+  <p><strong>Объект:</strong> взаимозависимые системы критической инфраструктуры (энергетика, водоснабжение, транспорт) на макроэкономическом уровне агрегации и процессы каскадного распространения отказов между ними под действием кратковременных шоков.</p>
+  <p><strong>Предмет:</strong> методика количественной оценки каскадного риска на основе стохастического оператора \(K_q\) с динамической матрицей Леонтьева \(A(t)\), калиброванной по данным WIOD и SCADA, и протокола контролируемого сравнения с детерминированными операторами \(K_{\text{Leontief}}, K_{\text{cl}}, K_{DR}\) в маргинальной зоне нагрузки.</p>
 
-<div class="legend">
-  <span class="tag tag-var">УПРАВЛ.</span> варьируемый
-  <span class="tag tag-fix">ФИКСИР.</span> контролируемый
-  <span class="tag tag-out">ВЫХОД</span> измеряемый
-  <span class="tag tag-method">МЕТОД</span> инструмент
-  <span class="tag tag-data">ДАННЫЕ</span> источник
-</div>
+  <h3>Гипотеза H₁</h3>
+  <p>
+    В маргинальной зоне нагрузки (не насыщённых сценариях кратковременных шоков) стохастический оператор \(K_q\) 
+    с СДУ‑динамикой и нелинейным порогом ёмкости обеспечивает прирост метрики полноты выявления каскадных отказов 
+    \(\Delta(s,m) \ge 0{,}25\) относительно каждого из детерминированных операторов 
+    \(K_{\text{Leontief}}, K_{\text{cl}}, K_{DR}\) не менее чем в 75&nbsp;% сценариев при фиксированной матрице 
+    межотраслевых связей \(A\).
+  </p>
 
-<!-- ═══════════════ ФАЗА 0 ═══════════════ -->
-<div class="phase phase-setup">Фаза 0. Постановка задачи и фиксация критериев (до эксперимента)</div>
+  <h3>Шаг 1. Калибровка параметров модели</h3>
+  <ol>
+    >
+      <strong>Матрица межотраслевых связей \(A\).</strong><br/>
+      Построить базовую матрицу Леонтьева по данным WIOD:
+      \[
+        a_{ij} = \frac{X_{ij}}{\text{GO}_j}, \quad a_{ii} = 0.
+      \]
+      При необходимости нормировать \(A\) по спектральному радиусу до целевого значения \(\rho_\text{target} \le 0{,}95\).
+    </li>
+    >
+      <strong>Пороги пропускной способности \(C_j\).</strong><br/>
+      Оценить пороги перегрузки для секторов energy и water по SCADA‑данным (например, HAI ICS, Kelmarsh) 
+      как высокие квантили нагрузки (например, \(Q_{0.95}\) от нормированной мощности), 
+      для транспорта — по proxy‑данным DfT Road Safety / логистической статистике.
+    </li>
+    >
+      <strong>Волатильности \(\sigma_j\) для стохастического оператора \(K_q\).</strong><br/>
+      Для каждого сектора:
+      <ul>
+        >взять высокочастотные SCADA‑ряды \(x_j(t)\) в нормальном режиме;</l/li>
+        >оценить приращения \(\Delta \log x_j(t)\), снять автокорреляцию ARIMA‑фильтром;</l/li>
+        >оценить дисперсию шума HAC‑оценкой Newey–West и перевести её в безразмерную волатильность 
+          \(\sigma_j^\text{dim} = \sigma_j^\text{raw} / (1 - C_j)\).</li>
+      </ul>
+      Для транспорта при отсутствии надёжных SCADA‑данных зафиксировать \(\sigma_\text{transport} = 0\) 
+      по протоколу no‑fabrication.
+    </li>
+    >
+      <strong>Фиксация pre‑registered параметров.</strong><br/>
+      Задать заранее: порог значимого прироста \(\delta\), порог узла \(\theta_\text{node}\), 
+      горизонт моделирования \(T\), шаг \(\Delta t\), параметр нелинейной деградации \(\alpha\), 
+      критерий маргинальности \(\eta_\text{marg} = 0{,}80\), уровень значимости \(\alpha_\text{stat}\).
+    </li>
+  </ol>
 
-<div class="step">
-  <div class="step-num">0.1</div>
-  <div class="step-desc">
-    <strong>Формулировка гипотезы</strong><br>
-    Количественный детектор каскадов (на основе непрерывного прироста $\Delta x_j$) чувствительнее классического (на основе пороговой бинаризации $x_j \geq C_j$).
-    <div class="note">Критерии зафиксированы до получения данных. Метрика, порог, условия — неизменны.</div>
-  </div>
-  <div class="step-formula">
-    <span class="f">$$H_1: \frac{K_q - K_{cl}}{K_{cl}} \geq 0.25$$</span>
-    <span class="f">$$H_0: \frac{K_q - K_{cl}}{K_{cl}} < 0.25$$</span>
-  </div>
-</div>
+  <h3>Шаг 2. Конструирование сценариев и инициализация</h3>
+  <ol>
+    >
+      <strong>Каталог сценариев.</strong><br/>
+      Сформировать конечное множество сценариев \(S\), включающее:
+      <ul>
+        >синтетические сценарии (например, полный/частичный отказ energy, перегрузка transport, деградация water);</l/li>
+        >исторические события (UCTE&nbsp;2006, Texas&nbsp;2021, India&nbsp;2012, Baltimore&nbsp;2024).</li>
+      </ul>
+    </li>
+    >
+      <strong>Задание начальных условий.</strong><br/>
+      Для каждого сценария \(s\) задать:
+      <ul>
+        >вектор начального состояния \(x_0(s)\) (нормированная загрузка секторов);</l/li>
+        >вектор шока \(u(s)\) и инициирующий сектор \(i_0\) на основе отчётов регуляторов и экспертной реконструкции;</l/li>
+        >горизонт моделирования \(T\) (например, \(T = 7\) шагов для маргинальной зоны).</li>
+      </ul>
+    </li>
+    >
+      <strong>Отбор маргинальных сценариев.</strong><br/>
+      Рассчитать для каждого сценария:
+      \[
+        \text{margin\_ratio}(s) = \max_j \frac{x_{j,0}(s) + u_j(s)}{C_j}.
+      \]
+      В множество \(\mathcal{M}\) (маргинальная зона) включить только сценарии с 
+      \(\text{margin\_ratio}(s) &lt; \eta_\text{marg} = 0{,}80\). 
+      Насыщенные сценарии использовать только для описательной валидации, без проверки \(H_1\).
+    </li>
+  </ol>
 
-<div class="step">
-  <div class="step-num">0.2</div>
-  <div class="step-desc">
-    <strong>Целевая функция сравнения</strong><br>
-    $K$ — доля MC-прогонов, в которых метод зафиксировал каскадный эффект, затрагивающий хотя бы одну неинициирующую подсистему.
-    <span class="tag tag-out">ВЫХОД</span>
-  </div>
-  <div class="step-formula">
-    <span class="f">$$K^{(m)} = \frac{1}{R}\sum_{r=1}^{R} I_m(s,r), \quad m \in \{cl, q\}$$</span>
-    <strong>Классический:</strong>
-    <span class="f">$I_{cl} = \mathbf{1}\!\left[\exists\, j \neq j_0,\; \exists\, t \leq T:\; x_j(t) \geq C_j\right]$</span>
-    <strong>Количественный:</strong>
-    <span class="f">$I_q = \mathbf{1}\!\left[\exists\, j \neq j_0:\; \max_{t \leq T}(x_j(t) - x_j(0)) \geq \delta\right]$</span>
-    <div class="small">$C_j$ — порог перегрузки (q95), $\delta = 0.10$</div>
-  </div>
-</div>
+  <h3>Шаг 3. Численный эксперимент (экспериментальное воздействие)</h3>
+  <p>
+    На этом шаге проводится собственно эксперимент: калиброванная модель инфраструктуры подвергается искусственно 
+    задаваемым шокам \(u(s)\), и оценивается реакция системы под четырьмя операторами.
+  </p>
+  <ol>
+    >
+      <strong>Единый вход/выход для операторов.</strong><br/>
+      Для каждого сценария \(s \in \mathcal{M}\) и каждого оператора 
+      \(m \in \{\text{Leontief}, \text{cl}, DR, q\}\) использовать единый формат входных данных:
+      \[
+        (x_0(s), u(s), A, C, T, \delta, \theta_\text{node}).
+      \]
+    </li>
+    >
+      <strong>Детерминированные операторы.</strong><br/>
+      Для \(K_{\text{Leontief}}, K_{\text{cl}}, K_{DR}\) выполнить по одному прогону (\(N_\text{runs} = 1\)) 
+      с расчётом траектории или финального состояния \(x_T^{(m)}(s)\) по их определению.
+    </li>
+    >
+      <strong>Стохастический оператор \(K_q\).</strong><br/>
+      Выполнить \(N_\text{runs}\) стохастических прогонов (например, \(N_\text{runs} = 1000\)) по схеме Эйлера–Маруямы:
+      \[
+        x_{t+1} = \operatorname{clip}_{[0,1]}\bigl(x_t + u_t + A(t)x_t + \boldsymbol{\sigma}\odot\sqrt{\Delta t}\,\boldsymbol{\varepsilon}_t\bigr),
+      \]
+      \[
+        A(t)_{ij} = a_{ij}\,\exp\!\left(-\alpha \frac{\max(0,\, x_j(t) - C_j)}{1 - C_j}\right),
+        \quad \boldsymbol{\varepsilon}_t \sim \mathcal{N}(0, I_n).
+      \]
+      Использовать детерминированную генерацию сидов (например, \(\text{seed}_r = \text{SHA256}(s, r)\)) 
+      для воспроизводимости результатов.
+    </li>
+  </ol>
 
-<div class="step">
-  <div class="step-num">0.3</div>
-  <div class="step-desc">
-    <strong>Модель: стохастическое дифференциальное уравнение</strong><br>
-    Динамика сектора $j$ описывается СДУ с дрейфом (межотраслевое распространение) и диффузией (волатильность из SCADA).
-    <span class="tag tag-method">МЕТОД</span> Euler–Maruyama
-    <div class="note">При $\sigma=0$, $\rho=0$, $\Delta t=1$, $T=1$ совпадает со старым дискретным оператором (тест: test_compatible_with_old_operator)</div>
-  </div>
-  <div class="step-formula">
-    <strong>Непрерывная форма:</strong>
-    <span class="f">$$dx_j = \underbrace{\left(\sum_i a_{ij} x_i - \rho_j x_j\right)}_{\text{дрейф}} dt + \underbrace{\sigma_j x_j\, dW_j}_{\text{диффузия}}$$</span>
-    <strong>Дискретизация (Эйлер–Маруяма):</strong>
-    <span class="f">$$x_j^{k+1} = \text{clip}_{[0,1]}\!\left(x_j^k + \left(\sum_i a_{ij} x_i^k - \rho_j x_j^k\right)\Delta t + \sigma_j x_j^k \sqrt{\Delta t}\, Z_j^k\right)$$</span>
-    <div class="small">$Z_j^k \sim \mathcal{N}(0,1)$ i.i.d. | Реализация: <code>sde_integrator.py</code></div>
-  </div>
-</div>
+  <h3>Шаг 4. Детекция каскада и расчёт метрик</h3>
+  <ol>
+    >
+      <strong>Индикаторы каскада.</strong><br/>
+      Для каждого оператора \(m\), сценария \(s\) и прогона \(r\) определить индикатор каскада:
+      \[
+        I^{(m)}(s, r) = 
+        \mathbf{1}\left\{\exists\, i \neq i_0 : \max_{t \le T} \bigl(x_i^{(m)}(t; s, r) - x_i^{(m)}(0; s, r)\bigr) \ge \delta \right\}.
+      \]
+    </li>
+    >
+      <strong>Метрика полноты выявления каскадов.</strong><br/>
+      Для каждого оператора \(m\) и сценария \(s\) вычислить:
+      \[
+        K^{(m)}(s) = \frac{1}{N_\text{runs}} \sum_{r=1}^{N_\text{runs}} I^{(m)}(s, r).
+      \]
+      Это оценка вероятности каскадного отказа на сценарии \(s\) по оператору \(m\).
+    </li>
+    >
+      <strong>Относительный прирост стохастического оператора.</strong><br/>
+      Для каждого baseline‑оператора \(m \in \{\text{Leontief}, \text{cl}, DR\}\) определить:
+      \[
+        \Delta(s,m) = \frac{K^{(q)}(s) - K^{(m)}(s)}{K^{(m)}(s)},
+      \]
+      при \(K^{(m)}(s) &gt; 0\). Сценарии с \(K^{(m)}(s) = 0\) выделить отдельно (без вычисления \(\Delta\)).
+    </li>
+  </ol>
 
-<div class="arrow">▼</div>
+  <h3>Шаг 5. Статистическая проверка H₁ и вывод</h3>
+  <ol>
+    >
+      <strong>Внутрисценарный статистический тест.</strong><br/>
+      Для каждого сценария \(s \in \mathcal{M}\) и baseline \(m\) использовать paired bootstrap по 
+      парам прогонов \((r_{K_q}, r_{K_m})\), чтобы получить бутстрэп‑доверительный интервал 
+      для \(\Delta(s,m)\) на уровне \(1 - \alpha_\text{adj}\) с поправкой Бонферрони 
+      (три сравнения: \(q\leftrightarrow \text{Leontief}, q\leftrightarrow \text{cl}, q\leftrightarrow DR\)).
+    </li>
+    >
+      <strong>Подтверждение H₁ на уровне сценария.</strong><br/>
+      Считать гипотезу \(H_1^{(s,m)}\) подтверждённой для пары \((s,m)\), если нижняя граница доверительного интервала 
+      для \(\Delta(s,m)\) не меньше 0.25:
+      \[
+        \text{CI}_{\text{low}}(\Delta(s,m)) \ge 0{,}25.
+      \]
+    </li>
+    >
+      <strong>Агрегация по сценариям (ConfirmationRate).</strong><br/>
+      Для каждого baseline \(m\) определить множество сценариев с определённым \(\Delta(s,m)\):
+      \[
+        \mathcal{M}'_m = \{\,s \in \mathcal{M} : K^{(m)}(s) &gt; 0 \,\},
+      \]
+      и рассчитать долю сценариев, где \(H_1^{(s,m)}\) подтверждена:
+      \[
+        \text{ConfirmationRate}^{(m)} = 
+        \frac{\#\{ s \in \mathcal{M}'_m : H_1^{(s,m)} \text{ подтверждена} \}}{|\mathcal{M}'_m|}.
+      \]
+    </li>
+    >
+      <strong>Интерпретация результата для общей гипотезы H₁.</strong><br/>
+      Считать гипотезу \(H_1\) в целом эмпирически поддержанной, если для всех трёх baseline‑операторов 
+      выполняется
+      \[
+        \text{ConfirmationRate}^{(m)} \ge 0{,}75, \quad 
+        m \in \{\text{Leontief}, \text{cl}, DR\},
+      \]
+      при этом отдельно описать сценарии с \(K^{(m)}(s) = 0\) и насыщенные сценарии вне \(\mathcal{M}\) 
+      (как границы применимости методики).
+    </li>
+  </ol>
 
-<!-- ═══════════════ ФАЗА 1: КАЛИБРОВКА ═══════════════ -->
-<div class="phase phase-calibration">Фаза 1. Калибровка параметров модели (по реальным данным)</div>
-
-<div class="step">
-  <div class="step-num">1.1</div>
-  <div class="step-desc">
-    <strong>Калибровка волатильности $\sigma_j$</strong><br>
-    Из SCADA-данных нормального режима (без атак) вычисляется волатильность логарифмических приращений.
-    <span class="tag tag-data">ДАННЫЕ</span> HAI ICS Dataset (1.3M строк, 1 сек/запись)
-    <span class="tag tag-data">ДАННЫЕ</span> Kelmarsh Farm SCADA (36 файлов, 10 мин/запись)
-    <div class="note">Скрипт: <code>scripts/calibrate_sigma.py</code> → <code>data/calibration/sigma_calibrated.json</code></div>
-  </div>
-  <div class="step-formula">
-    <span class="f">$$\sigma_j = \frac{\text{std}(\Delta \log x_j)}{\sqrt{\Delta t}}$$</span>
-    <strong>Результаты:</strong>
-    <span class="f">$\sigma_{\text{energy}}^{\text{ICS}} = 6.54$ ч$^{-1/2}$ (HAI, P4_ST/HT)<br>
-    $\sigma_{\text{energy}}^{\text{wind}} = 0.790$ ч$^{-1/2}$ (Kelmarsh)<br>
-    $\sigma_{\text{water}} = 18.08$ ч$^{-1/2}$ (HAI, P3)</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">1.2</div>
-  <div class="step-desc">
-    <strong>Калибровка порогов перегрузки $C_j$</strong><br>
-    95-й перцентиль нормированной нагрузки в нормальном режиме. Если $x_j \geq C_j$ — сектор «перегружен».
-    <span class="tag tag-data">ДАННЫЕ</span> HAI ICS (energy, water)
-    <span class="tag tag-data">ДАННЫЕ</span> DfT Road Safety (transport, 16K HGV incidents)
-    <div class="note">Скрипт: <code>scripts/calibrate_capacity.py</code> → <code>data/calibration/capacity_thresholds.json</code></div>
-  </div>
-  <div class="step-formula">
-    <span class="f">$$C_j = q_{0.95}\!\left(\frac{x_j}{x_j^{\text{nom}}}\right)$$</span>
-    <strong>Результаты:</strong>
-    <span class="f">$C_{\text{energy}} = 0.883$ (HAI, нормальный режим)<br>
-    $C_{\text{water}} = 0.646$ (HAI, нормальный режим)<br>
-    $C_{\text{transport}} = 0.928$ (DfT HGV, 2020–2024)</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">1.3</div>
-  <div class="step-desc">
-    <strong>Калибровка матрицы зависимостей $A$</strong><br>
-    Коэффициенты Леонтьева из таблиц «затраты-выпуск» трёх стран. Опционально — байесовское обновление по прокси-рядам аварий.
-    <span class="tag tag-data">ДАННЫЕ</span> WIOD 2016 NIOT (43 страны, 2014)
-    <span class="tag tag-method">МЕТОД</span> Леонтьев + Bayesian conjugate normal
-    <div class="note">Скрипт: <code>scripts/calibrate_A.py</code> → <code>data/calibration/A_leontief.json</code><br>
-    Байесовский: <code>matrix_doc/bayesian_calibrator.py</code> → <code>A_bayesian_posterior.json</code></div>
-  </div>
-  <div class="step-formula">
-    <span class="f">$a_{\text{raw}}[i][j] = \dfrac{X[i][j]}{\text{GO}[j]}$ — Леонтьев</span>
-    <span class="f">$A = \frac{1}{3}(A_{\text{RUS}} + A_{\text{DEU}} + A_{\text{USA}})$, rescale max→0.5</span>
-    <span class="f">Spearman $\rho = 0.962$ между странами</span>
-    <strong>Байесовское обновление:</strong>
-    <span class="f">$$\mu_n = \frac{\sigma_\varepsilon^2 \mu_0 + n \sigma_0^2 \bar{a}_{\text{data}}}{\sigma_\varepsilon^2 + n \sigma_0^2}$$</span>
-    <div class="small">Prior: WIOD | Likelihood: Texas+India proxy ($n=214$)</div>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">1.4</div>
-  <div class="step-desc">
-    <strong>Динамическая матрица $A(t)$ — деградационный множитель</strong><br>
-    При перегрузке поставщика $j$ ($x_j \geq C_j$) его способность передавать нагрузку снижается — моделирует разрыв цепочки поставок.
-    <span class="tag tag-fix">ФИКСИР.</span> $\alpha$ (параметр скорости затухания)
-    <div class="note">Реализация: <code>SDEIntegrator._compute_dynamic_A()</code>. При $\alpha=0$: $A(t) = A^{\text{static}}$ (fast path).</div>
-  </div>
-  <div class="step-formula">
-    <span class="f">$$\varphi_j(t) = \exp\!\left(-\alpha \cdot \frac{\max(0, x_j - C_j)}{1 - C_j}\right)$$</span>
-    <span class="f">$$A(t)_{ij} = A^{\text{static}}_{ij} \cdot \varphi_j(t)$$</span>
-    <div class="small">$\alpha=0$: статика | $\alpha=5$: $\varphi \approx 0.007$ при $x_j=1$</div>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">1.5</div>
-  <div class="step-desc">
-    <strong>Проверка устойчивости: спектральный радиус</strong><br>
-    $\rho(A) < 1$ гарантирует сходимость (затухание каскада). Аналог $\rho(W) < 1$ в DebtRank.
-    <span class="tag tag-out">ВЫХОД</span>
-  </div>
-  <div class="step-formula">
-    <span class="f">$\det(A - \lambda I) = 0 \;\Rightarrow\; \rho(A) < 0.95$</span>
-    <span class="f">$\rho(A_{\text{bayes}}) = 0.194 < 1$ ✓</span>
-    <div class="small">Каскад затухает за 3–4 шага</div>
-  </div>
-</div>
-
-<div class="arrow">▼</div>
-
-<!-- ═══════════════ ФАЗА 2: ОДИН ПРОГОН ═══════════════ -->
-<div class="phase phase-run">Фаза 2. Один прогон Monte Carlo (повторяется $R = 1000$ раз)</div>
-
-<div class="step">
-  <div class="step-num">2.1</div>
-  <div class="step-desc">
-    <strong>Генерация seed</strong><br>
-    Детерминированный seed из SHA256 — гарантирует воспроизводимость.
-    <span class="tag tag-fix">ФИКСИР.</span>
-  </div>
-  <div class="step-formula">
-    <span class="f">$$\text{seed}(s, r) = \text{int}\!\left(\text{SHA256}(s : r)_{[0:16]},\; 16\right)$$</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">2.2</div>
-  <div class="step-desc">
-    <strong>Инициализация $x_0$ и шок $u$</strong><br>
-    Доменные сервисы возвращают базовое состояние. Шок $u$ применяется однократно на шаге $k=0$.
-    <span class="tag tag-var">УПРАВЛ.</span> Сценарий $s \in S$ (определяет $j_0$, тип, амплитуду шока)
-    <div class="note">Пример: S3 transport +0.25 → $x_T^{\text{post}} = 0.583$; Baltimore transport +0.30</div>
-  </div>
-  <div class="step-formula">
-    <span class="f">$x_0$ ← статус доменных сервисов</span>
-    <span class="f">Шок на шаге $k=0$:<br>
-    $x^1 = \text{clip}_{[0,1]}\!\left(\text{drift} + \text{diffusion} + u\right)$</span>
-    <div class="small">$u \in \mathbb{R}^N$ — вектор шока (только $k=0$)</div>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">2.3</div>
-  <div class="step-desc">
-    <strong>Интегрирование СДУ: $T$ шагов Эйлера–Маруямы</strong><br>
-    На каждом шаге: дрейф (межотраслевое распространение через $A$) + диффузия (калиброванная стохастика $\sigma_j$). Горизонт: $T=7$ (маргинальные) или $T=50$ (насыщенные).
-    <span class="tag tag-fix">ФИКСИР.</span> $A$, $\sigma_j$, $\rho_j$, $\Delta t$
-    <div class="note">Реализация: <code>SDEIntegrator.run()</code> — <code>sde_integrator.py</code></div>
-  </div>
-  <div class="step-formula">
-    <span class="f">Для $k = 0, 1, \ldots, T-1$:</span>
-    <span class="f">$$x_j^{k+1} = \text{clip}\!\left(x_j^k + \underbrace{\left(\sum_i a_{ij} x_i^k - \rho_j x_j^k\right)\Delta t}_{\text{дрейф}} + \underbrace{\sigma_j x_j^k \sqrt{\Delta t}\, Z_j^k}_{\text{диффузия}}\right)$$</span>
-    <span class="f">$Z_j^k \sim \mathcal{N}(0,1)$ — i.i.d. из PRNG(seed)</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">2.4</div>
-  <div class="step-desc">
-    <strong>Детекция каскада</strong><br>
-    По траектории $\{x_j^k\}_{k=0}^T$ параллельно вычисляются два индикатора.
-    <span class="tag tag-out">ВЫХОД</span> $I_{cl}$, $I_q$
-    <div class="note">Реализация: <code>SDEIntegrator.detect_cascade()</code></div>
-  </div>
-  <div class="step-formula">
-    <strong>Классический (пороговый):</strong>
-    <span class="f">$I_{cl} = \mathbf{1}\!\left[\exists\, j \neq j_0,\; \exists\, k:\; x_j^k \geq C_j\right]$<br>
-    <span class="small">$C_E=0.883$, $C_W=0.646$, $C_T=0.928$</span></span>
-    <strong>Количественный (непрерывный):</strong>
-    <span class="f">$I_q = \mathbf{1}\!\left[\exists\, j \neq j_0:\; \max_k(x_j^k - x_j^0) \geq \delta\right]$<br>
-    <span class="small">$\delta = 0.10$</span></span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">2.5</div>
-  <div class="step-desc">
-    <strong>Запись результатов прогона</strong><br>
-    Траектория, индикаторы, $\Delta R$ — всё сохраняется в JSON.
-    <span class="tag tag-out">ВЫХОД</span>
-  </div>
-  <div class="step-formula">
-    <span class="f">Прогон $r$: $(I_{cl,r},\; I_{q,r},\; \{x_j^k\}_{k=0}^T,\; \Delta R_r)$</span>
-    <span class="f">$\Delta R_r = \sum_j w_j(x_j^T - x_j^0)$</span>
-    <div class="small">→ <code>results/mc_runs/</code></div>
-  </div>
-</div>
-
-<div class="arrow">▼ повторить $R = 1000$ раз</div>
-
-<!-- ═══════════════ ФАЗА 3 ═══════════════ -->
-<div class="phase phase-measure">Фаза 3. Агрегация метрик</div>
-
-<div class="step">
-  <div class="step-num">3.1</div>
-  <div class="step-desc">
-    <strong>Полнота выявления каскадов $K$</strong><br>
-    <span class="tag tag-out">ВЫХОД</span> $K_{cl}$, $K_q$
-  </div>
-  <div class="step-formula">
-    <span class="f">$K_{cl} = \frac{1}{R}\sum_{r=1}^R I_{cl,r}$ &emsp; $K_q = \frac{1}{R}\sum_{r=1}^R I_{q,r}$</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">3.2</div>
-  <div class="step-desc">
-    <strong>Статистики прироста риска</strong><br>
-    <span class="tag tag-out">ВЫХОД</span> mean, p95, распределение max_delta
-  </div>
-  <div class="step-formula">
-    <span class="f">$\overline{\Delta R}$, $p_{95}(\Delta R)$, $\text{max\_delta}_r = \max_{j \neq j_0}(x_j^T - x_j^0)$</span>
-  </div>
-</div>
-
-<div class="arrow">▼</div>
-
-<!-- ═══════════════ ФАЗА 4 ═══════════════ -->
-<div class="phase phase-decide">Фаза 4. Проверка гипотезы</div>
-
-<div class="step">
-  <div class="step-num">4.1</div>
-  <div class="step-desc">
-    <strong>Вычисление критерия и решение</strong>
-  </div>
-  <div class="step-formula">
-    <span class="f">$\Delta\% = \frac{K_q - K_{cl}}{K_{cl}} \times 100\%$</span>
-    <span class="f" style="background:var(--green-bg);border-color:#A5D6A7">$\Delta\% \geq 25\%$ → <strong style="color:var(--green)">$H_0$ ОТКЛОНЯЕТСЯ</strong> ✓</span>
-    <span class="f" style="background:var(--orange-bg);border-color:#FFCC80">$\Delta\% < 25\%$ → $H_0$ не отклоняется</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">4.2</div>
-  <div class="step-desc">
-    <strong>Результаты: подстановка</strong><br>
-    <span style="font-size:12px;color:var(--gray)">$R=1000$, $T=7$, $\alpha=0$, Эйлер–Маруяма</span>
-  </div>
-  <div class="step-formula">
-    <span class="f" style="background:var(--green-bg)">S3: $\frac{0.883-0.595}{0.595}=+48.4\%$ ≥ 25% ✓</span>
-    <span class="f" style="background:var(--green-bg)">S4: $\frac{1.000-0.620}{0.620}=+61.3\%$ ≥ 25% ✓</span>
-    <span class="f" style="background:var(--green-bg)">Baltimore: $\frac{0.884-0.606}{0.606}=+45.9\%$ ≥ 25% ✓</span>
-    <span class="f" style="background:var(--green-bg)">Europe 2006: $\frac{1.000-0.038}{0.038}=+2532\%$ ✓</span>
-    <span class="f" style="background:var(--green-bg)">India 2012: $\frac{1.000-0.142}{0.142}=+604\%$ ✓</span>
-    <span class="f" style="background:var(--orange-bg)">S5 combined: $\frac{1.000-0.832}{0.832}=+20.2\%$ < 25%</span>
-  </div>
-</div>
-
-<div class="arrow">▼</div>
-
-<!-- ═══════════════ ФАЗА 5 ═══════════════ -->
-<div class="phase phase-sensitivity">Фаза 5. Анализ чувствительности</div>
-
-<div class="step">
-  <div class="step-num">5.1</div>
-  <div class="step-desc">
-    <strong>α-sweep (динамическая матрица)</strong><br>
-    $\alpha \in \{0,1,2,3,5,8,10,15,20\}$, $N=1000$, $T=7$.
-    <span class="tag tag-var">УПРАВЛ.</span> $\alpha$
-    <div class="note">S4: K_cl снижается 0.592→0.528 (−11%, ~4 SE). S3: незначимо ($x_T \ll C_T$).</div>
-  </div>
-  <div class="step-formula">
-    <span class="f">S4: mean_Δx: $0.406 \to 0.357$ (−12%)<br>Демпфирование: $\varphi_W < 1$ при $x_W > C_W$</span>
-    <span class="f">S3: $\varphi_T = 1$ всегда ($x_T = 0.583 \ll C_T = 0.928$)</span>
-    <div class="small">Артефакты: <code>results/alpha_sweep.json</code></div>
-  </div>
-</div>
-
-<div class="arrow">▼</div>
-
-<!-- ═══════════════ ФАЗА 6 ═══════════════ -->
-<div class="phase phase-validate">Фаза 6. Валидация на реальных авариях</div>
-
-<div class="step">
-  <div class="step-num">6.1</div>
-  <div class="step-desc">
-    <strong>Метод: модель получает только силу удара</strong><br>
-    Входные параметры $(x_0, u)$ — из регуляторных отчётов. Модель не знает, какие секторы деградировали. Предсказание сравнивается с документированной реальностью.
-    <span class="tag tag-data">ДАННЫЕ</span> FERC/NERC, CEA, UCTE, Dulin et al. 2025 (Nature Comm.)
-    <div class="note">Скрипт: <code>scripts/validate_real_events.py</code> → <code>results/validation_real_events.json</code></div>
-  </div>
-  <div class="step-formula">
-    <span class="f" style="background:var(--green-bg)">
-    <strong>Совпадение секторов: 11/12 (92%)</strong><br>
-    <strong>Совпадение каскада: 4/4 (100%)</strong><br>
-    MAE = 0.203
-    </span>
-    <span class="f">Промах: Texas 2021, water — A[wat,ene]=0.006<br>
-    WIOD не отражает физическую зависимость<br>насосов от электросети</span>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">6.2</div>
-  <div class="step-desc">
-    <strong>Ключевой доказательный кейс: UCTE 2006</strong><br>
-    Малый шок энергетики (+0.05). Классический оператор с порогом $C_T = 0.928$ практически слеп. Количественный обнаруживает каскад в каждом прогоне. Реальность: каскад транспорта произошёл (подтверждено регулятором UCTE).
-  </div>
-  <div class="step-formula">
-    <span class="f">$K_{cl} = 0.038$ (классический <strong class="red">слеп</strong>)<br>
-    $K_q = 1.000$ (количественный <strong class="green">обнаруживает</strong>)<br>
-    $\Delta\% = +2532\%$</span>
-    <span class="f">Механизм: $A[\text{tra},\text{ene}] = 0.500$<br>
-    $\Delta x_T = 0.500 \times 0.667 \times 7\Delta t \approx 0.25 \gg \delta$</span>
-  </div>
-</div>
-
-<div class="arrow">▼</div>
-
-<div class="phase" style="background:var(--dark)">
-  Итог: $H_1$ подтверждена на 5/6 ненасыщенных сценариях ($\Delta\% = 45{-}2532\%$).<br>
-  Валидация: 11/12 секторных пар (92%). Единственный промах — water←energy (WIOD-ограничение).<br>
-  Область применимости: шоки умеренной интенсивности ($x_j + u_j < C_j$), при которых $A$ обеспечивает $\Delta x \geq \delta$.
-</div>
-
-</body>
-</html>
+  <h3>Ссылка на полную методику</h3>
+  <p>
+    Полное пошаговое описание методики (включая псевдокод операторов, подробные правила калибровки и каталог сценариев) 
+    приведено в документе <em>METHODOLOGY-1.md</em> (разделы §0–§11).
+  </p>
+</section>
