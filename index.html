@@ -1,193 +1,402 @@
-<section id="methodology-H1">
-  <h2>Методика проверки гипотезы H₁</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Дизайн эксперимента — ВКР</title>
+<style>
+  :root{
+    --navy:#1E2761;
+    --blue:#2F4A8A;
+    --ice:#CADCFC;
+    --soft:#E8EFFB;
+    --accent:#3E6FD9;
+    --text:#0E1A3C;
+    --muted:#4A5578;
+    --white:#FFFFFF;
+    --ok:#2F7D4F;
+    --warn:#B85042;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--soft);color:var(--text);font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;line-height:1.45}
+  body{padding:32px 24px;max-width:1180px;margin:0 auto}
 
-  <h3>Объект и предмет исследования</h3>
-  <p><strong>Объект:</strong> взаимозависимые системы критической инфраструктуры (энергетика, водоснабжение, транспорт) на макроэкономическом уровне агрегации и процессы каскадного распространения отказов между ними под действием кратковременных шоков.</p>
-  <p><strong>Предмет:</strong> методика количественной оценки каскадного риска на основе стохастического оператора \(K_q\) с динамической матрицей Леонтьева \(A(t)\), калиброванной по данным WIOD и SCADA, и протокола контролируемого сравнения с детерминированными операторами \(K_{\text{Leontief}}, K_{\text{cl}}, K_{DR}\) в маргинальной зоне нагрузки.</p>
+  .deck-title{color:var(--navy);font-size:28px;font-weight:700;margin-bottom:6px;letter-spacing:.2px}
+  .deck-sub{color:var(--muted);font-size:15px;margin-bottom:28px}
 
-  <h3>Гипотеза H₁</h3>
-  <p>
-    В маргинальной зоне нагрузки (не насыщённых сценариях кратковременных шоков) стохастический оператор \(K_q\) 
-    с СДУ‑динамикой и нелинейным порогом ёмкости обеспечивает прирост метрики полноты выявления каскадных отказов 
-    \(\Delta(s,m) \ge 0{,}25\) относительно каждого из детерминированных операторов 
-    \(K_{\text{Leontief}}, K_{\text{cl}}, K_{DR}\) не менее чем в 75&nbsp;% сценариев при фиксированной матрице 
-    межотраслевых связей \(A\).
-  </p>
+  .slide{
+    background:var(--white);
+    border:1px solid var(--ice);
+    border-radius:14px;
+    padding:32px 36px 28px 36px;
+    margin-bottom:26px;
+    box-shadow:0 4px 18px rgba(30,39,97,.07);
+    position:relative;
+    page-break-inside:avoid;
+  }
+  .slide::before{
+    content:"";position:absolute;left:0;top:18px;bottom:18px;width:6px;
+    background:linear-gradient(180deg,var(--navy),var(--accent));
+    border-radius:0 4px 4px 0;
+  }
+  .slide-no{
+    position:absolute;top:24px;right:32px;
+    background:var(--navy);color:var(--white);
+    padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.4px;
+  }
+  .slide h2{color:var(--navy);font-size:22px;font-weight:700;margin-bottom:6px}
+  .slide .sub{color:var(--blue);font-size:14px;font-weight:500;margin-bottom:20px}
 
-  <h3>Шаг 1. Калибровка параметров модели</h3>
-  <ol>
-    >
-      <strong>Матрица межотраслевых связей \(A\).</strong><br/>
-      Построить базовую матрицу Леонтьева по данным WIOD:
-      \[
-        a_{ij} = \frac{X_{ij}}{\text{GO}_j}, \quad a_{ii} = 0.
-      \]
-      При необходимости нормировать \(A\) по спектральному радиусу до целевого значения \(\rho_\text{target} \le 0{,}95\).
-    </li>
-    >
-      <strong>Пороги пропускной способности \(C_j\).</strong><br/>
-      Оценить пороги перегрузки для секторов energy и water по SCADA‑данным (например, HAI ICS, Kelmarsh) 
-      как высокие квантили нагрузки (например, \(Q_{0.95}\) от нормированной мощности), 
-      для транспорта — по proxy‑данным DfT Road Safety / логистической статистике.
-    </li>
-    >
-      <strong>Волатильности \(\sigma_j\) для стохастического оператора \(K_q\).</strong><br/>
-      Для каждого сектора:
-      <ul>
-        >взять высокочастотные SCADA‑ряды \(x_j(t)\) в нормальном режиме;</l/li>
-        >оценить приращения \(\Delta \log x_j(t)\), снять автокорреляцию ARIMA‑фильтром;</l/li>
-        >оценить дисперсию шума HAC‑оценкой Newey–West и перевести её в безразмерную волатильность 
-          \(\sigma_j^\text{dim} = \sigma_j^\text{raw} / (1 - C_j)\).</li>
-      </ul>
-      Для транспорта при отсутствии надёжных SCADA‑данных зафиксировать \(\sigma_\text{transport} = 0\) 
-      по протоколу no‑fabrication.
-    </li>
-    >
-      <strong>Фиксация pre‑registered параметров.</strong><br/>
-      Задать заранее: порог значимого прироста \(\delta\), порог узла \(\theta_\text{node}\), 
-      горизонт моделирования \(T\), шаг \(\Delta t\), параметр нелинейной деградации \(\alpha\), 
-      критерий маргинальности \(\eta_\text{marg} = 0{,}80\), уровень значимости \(\alpha_\text{stat}\).
-    </li>
-  </ol>
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
 
-  <h3>Шаг 2. Конструирование сценариев и инициализация</h3>
-  <ol>
-    >
-      <strong>Каталог сценариев.</strong><br/>
-      Сформировать конечное множество сценариев \(S\), включающее:
-      <ul>
-        >синтетические сценарии (например, полный/частичный отказ energy, перегрузка transport, деградация water);</l/li>
-        >исторические события (UCTE&nbsp;2006, Texas&nbsp;2021, India&nbsp;2012, Baltimore&nbsp;2024).</li>
-      </ul>
-    </li>
-    >
-      <strong>Задание начальных условий.</strong><br/>
-      Для каждого сценария \(s\) задать:
-      <ul>
-        >вектор начального состояния \(x_0(s)\) (нормированная загрузка секторов);</l/li>
-        >вектор шока \(u(s)\) и инициирующий сектор \(i_0\) на основе отчётов регуляторов и экспертной реконструкции;</l/li>
-        >горизонт моделирования \(T\) (например, \(T = 7\) шагов для маргинальной зоны).</li>
-      </ul>
-    </li>
-    >
-      <strong>Отбор маргинальных сценариев.</strong><br/>
-      Рассчитать для каждого сценария:
-      \[
-        \text{margin\_ratio}(s) = \max_j \frac{x_{j,0}(s) + u_j(s)}{C_j}.
-      \]
-      В множество \(\mathcal{M}\) (маргинальная зона) включить только сценарии с 
-      \(\text{margin\_ratio}(s) &lt; \eta_\text{marg} = 0{,}80\). 
-      Насыщенные сценарии использовать только для описательной валидации, без проверки \(H_1\).
-    </li>
-  </ol>
+  .card{
+    background:var(--soft);
+    border-left:3px solid var(--accent);
+    border-radius:8px;
+    padding:14px 16px;
+  }
+  .card .label{color:var(--navy);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .card p{font-size:13.8px;color:var(--text)}
 
-  <h3>Шаг 3. Численный эксперимент (экспериментальное воздействие)</h3>
-  <p>
-    На этом шаге проводится собственно эксперимент: калиброванная модель инфраструктуры подвергается искусственно 
-    задаваемым шокам \(u(s)\), и оценивается реакция системы под четырьмя операторами.
-  </p>
-  <ol>
-    >
-      <strong>Единый вход/выход для операторов.</strong><br/>
-      Для каждого сценария \(s \in \mathcal{M}\) и каждого оператора 
-      \(m \in \{\text{Leontief}, \text{cl}, DR, q\}\) использовать единый формат входных данных:
-      \[
-        (x_0(s), u(s), A, C, T, \delta, \theta_\text{node}).
-      \]
-    </li>
-    >
-      <strong>Детерминированные операторы.</strong><br/>
-      Для \(K_{\text{Leontief}}, K_{\text{cl}}, K_{DR}\) выполнить по одному прогону (\(N_\text{runs} = 1\)) 
-      с расчётом траектории или финального состояния \(x_T^{(m)}(s)\) по их определению.
-    </li>
-    >
-      <strong>Стохастический оператор \(K_q\).</strong><br/>
-      Выполнить \(N_\text{runs}\) стохастических прогонов (например, \(N_\text{runs} = 1000\)) по схеме Эйлера–Маруямы:
-      \[
-        x_{t+1} = \operatorname{clip}_{[0,1]}\bigl(x_t + u_t + A(t)x_t + \boldsymbol{\sigma}\odot\sqrt{\Delta t}\,\boldsymbol{\varepsilon}_t\bigr),
-      \]
-      \[
-        A(t)_{ij} = a_{ij}\,\exp\!\left(-\alpha \frac{\max(0,\, x_j(t) - C_j)}{1 - C_j}\right),
-        \quad \boldsymbol{\varepsilon}_t \sim \mathcal{N}(0, I_n).
-      \]
-      Использовать детерминированную генерацию сидов (например, \(\text{seed}_r = \text{SHA256}(s, r)\)) 
-      для воспроизводимости результатов.
-    </li>
-  </ol>
+  .factor-table{
+    width:100%;border-collapse:collapse;margin:6px 0 14px 0;font-size:13.5px;
+  }
+  .factor-table th{
+    background:var(--navy);color:var(--white);text-align:left;
+    padding:10px 12px;font-weight:600;font-size:12.5px;letter-spacing:.3px;
+  }
+  .factor-table td{
+    padding:10px 12px;border-bottom:1px solid var(--ice);vertical-align:top;
+  }
+  .factor-table tr:last-child td{border-bottom:none}
+  .factor-table tr:nth-child(even) td{background:var(--soft)}
+  .factor-table code{font-family:"Cambria Math","Consolas",monospace;color:var(--navy);background:var(--white);padding:1px 5px;border-radius:3px;font-size:12.8px}
 
-  <h3>Шаг 4. Детекция каскада и расчёт метрик</h3>
-  <ol>
-    >
-      <strong>Индикаторы каскада.</strong><br/>
-      Для каждого оператора \(m\), сценария \(s\) и прогона \(r\) определить индикатор каскада:
-      \[
-        I^{(m)}(s, r) = 
-        \mathbf{1}\left\{\exists\, i \neq i_0 : \max_{t \le T} \bigl(x_i^{(m)}(t; s, r) - x_i^{(m)}(0; s, r)\bigr) \ge \delta \right\}.
-      \]
-    </li>
-    >
-      <strong>Метрика полноты выявления каскадов.</strong><br/>
-      Для каждого оператора \(m\) и сценария \(s\) вычислить:
-      \[
-        K^{(m)}(s) = \frac{1}{N_\text{runs}} \sum_{r=1}^{N_\text{runs}} I^{(m)}(s, r).
-      \]
-      Это оценка вероятности каскадного отказа на сценарии \(s\) по оператору \(m\).
-    </li>
-    >
-      <strong>Относительный прирост стохастического оператора.</strong><br/>
-      Для каждого baseline‑оператора \(m \in \{\text{Leontief}, \text{cl}, DR\}\) определить:
-      \[
-        \Delta(s,m) = \frac{K^{(q)}(s) - K^{(m)}(s)}{K^{(m)}(s)},
-      \]
-      при \(K^{(m)}(s) &gt; 0\). Сценарии с \(K^{(m)}(s) = 0\) выделить отдельно (без вычисления \(\Delta\)).
-    </li>
-  </ol>
+  .formula{
+    font-family:"Cambria Math","Times New Roman",serif;
+    background:var(--soft);padding:1px 6px;border-radius:4px;color:var(--navy);
+  }
 
-  <h3>Шаг 5. Статистическая проверка H₁ и вывод</h3>
-  <ol>
-    >
-      <strong>Внутрисценарный статистический тест.</strong><br/>
-      Для каждого сценария \(s \in \mathcal{M}\) и baseline \(m\) использовать paired bootstrap по 
-      парам прогонов \((r_{K_q}, r_{K_m})\), чтобы получить бутстрэп‑доверительный интервал 
-      для \(\Delta(s,m)\) на уровне \(1 - \alpha_\text{adj}\) с поправкой Бонферрони 
-      (три сравнения: \(q\leftrightarrow \text{Leontief}, q\leftrightarrow \text{cl}, q\leftrightarrow DR\)).
-    </li>
-    >
-      <strong>Подтверждение H₁ на уровне сценария.</strong><br/>
-      Считать гипотезу \(H_1^{(s,m)}\) подтверждённой для пары \((s,m)\), если нижняя граница доверительного интервала 
-      для \(\Delta(s,m)\) не меньше 0.25:
-      \[
-        \text{CI}_{\text{low}}(\Delta(s,m)) \ge 0{,}25.
-      \]
-    </li>
-    >
-      <strong>Агрегация по сценариям (ConfirmationRate).</strong><br/>
-      Для каждого baseline \(m\) определить множество сценариев с определённым \(\Delta(s,m)\):
-      \[
-        \mathcal{M}'_m = \{\,s \in \mathcal{M} : K^{(m)}(s) &gt; 0 \,\},
-      \]
-      и рассчитать долю сценариев, где \(H_1^{(s,m)}\) подтверждена:
-      \[
-        \text{ConfirmationRate}^{(m)} = 
-        \frac{\#\{ s \in \mathcal{M}'_m : H_1^{(s,m)} \text{ подтверждена} \}}{|\mathcal{M}'_m|}.
-      \]
-    </li>
-    >
-      <strong>Интерпретация результата для общей гипотезы H₁.</strong><br/>
-      Считать гипотезу \(H_1\) в целом эмпирически поддержанной, если для всех трёх baseline‑операторов 
-      выполняется
-      \[
-        \text{ConfirmationRate}^{(m)} \ge 0{,}75, \quad 
-        m \in \{\text{Leontief}, \text{cl}, DR\},
-      \]
-      при этом отдельно описать сценарии с \(K^{(m)}(s) = 0\) и насыщенные сценарии вне \(\mathcal{M}\) 
-      (как границы применимости методики).
-    </li>
-  </ol>
+  .note{
+    background:#FFF8E6;
+    border-left:3px solid #E0A800;
+    border-radius:6px;
+    padding:12px 14px;font-size:13.5px;color:#5F4A00;margin-bottom:10px;
+  }
+  .note b{color:#6B5200}
 
-  <h3>Ссылка на полную методику</h3>
-  <p>
-    Полное пошаговое описание методики (включая псевдокод операторов, подробные правила калибровки и каталог сценариев) 
-    приведено в документе <em>METHODOLOGY-1.md</em> (разделы §0–§11).
-  </p>
+  .crit{
+    background:#F2F7FF;border:1px solid var(--ice);border-radius:8px;
+    padding:14px 16px;margin-bottom:14px;
+  }
+  .crit .t{color:var(--navy);font-weight:700;font-size:12.5px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:8px}
+  .crit ul{list-style:none}
+  .crit li{padding:4px 0 4px 22px;position:relative;font-size:13.8px}
+  .crit li::before{content:"";position:absolute;left:4px;top:10px;width:8px;height:8px;background:var(--accent);border-radius:50%}
+
+  .pipeline{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:6px 0 14px 0;
+  }
+  .pipeline .node{
+    background:var(--white);border:2px solid var(--accent);border-radius:10px;
+    padding:12px 10px;text-align:center;font-size:12.5px;color:var(--navy);
+    position:relative;min-height:92px;
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .pipeline .node b{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.4px;margin-bottom:6px;text-transform:uppercase}
+  .pipeline .node span{font-size:13px;font-weight:600;color:var(--navy)}
+  .pipeline .node::after{
+    content:"→";position:absolute;right:-14px;top:50%;transform:translateY(-50%);
+    color:var(--accent);font-size:20px;font-weight:700;z-index:5;
+  }
+  .pipeline .node:last-child::after{display:none}
+
+  .tasks{list-style:none;counter-reset:task;margin:6px 0 14px 0}
+  .tasks li{
+    counter-increment:task;position:relative;
+    padding:10px 12px 10px 48px;margin-bottom:8px;
+    background:var(--white);border:1px solid var(--ice);border-radius:8px;font-size:13.8px;
+  }
+  .tasks li::before{
+    content:counter(task);position:absolute;left:12px;top:10px;
+    background:var(--navy);color:var(--white);width:26px;height:26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;
+  }
+  .tasks li b{color:var(--navy)}
+
+  .link{
+    display:inline-block;margin-top:6px;
+    color:var(--white);background:var(--accent);
+    text-decoration:none;padding:8px 14px;border-radius:6px;font-size:13px;font-weight:600;
+  }
+  .link:hover{background:var(--navy)}
+
+  .svg-wrap{background:var(--soft);border-radius:10px;padding:12px;margin-bottom:14px}
+
+  .kbd{background:var(--white);border:1px solid var(--ice);color:var(--navy);padding:1px 6px;border-radius:4px;font-family:"Consolas",monospace;font-size:12.5px}
+
+  .key-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .key-stats .kpi{
+    background:linear-gradient(180deg,var(--navy),var(--blue));
+    color:var(--white);border-radius:10px;padding:14px 12px;text-align:center;
+  }
+  .key-stats .kpi .val{font-size:22px;font-weight:700;display:block;margin-bottom:4px}
+  .key-stats .kpi .lbl{font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;opacity:.85}
+
+  @media print{
+    body{background:var(--white);padding:0;max-width:none}
+    .slide{box-shadow:none;margin-bottom:0;page-break-after:always;border-radius:0;border:none}
+    .deck-title,.deck-sub{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="deck-title">Дизайн эксперимента</div>
+<div class="deck-sub">Вспомогательный блок к методике: что варьируется, что контролируется, как обеспечивается воспроизводимость</div>
+
+<!-- =============== SLIDE A: ЭКСПЕРИМЕНТ КАК ОБЪЕКТ =============== -->
+<section class="slide">
+  <div class="slide-no">Слайд А — общая рамка</div>
+  <h2>Что такое «эксперимент» в этой работе</h2>
+  <div class="sub">Активная параметрическая манипуляция стохастической моделью каскада через микросервисный стенд</div>
+
+  <div class="row2">
+    <div class="card">
+      <div class="label">Субъект эксперимента</div>
+      <p>Математическая модель распространения отказа — стохастическое дифференциальное уравнение (SDE, §2.6) с численной схемой Эйлера–Маруямы и Skorokhod-проекцией на ограниченный симплекс состояний.</p>
+    </div>
+    <div class="card">
+      <div class="label">Экспериментальная установка</div>
+      <p>Микросервисный стенд: <b>scenario_simulator</b> (SDE-ядро), <b>risk_engine</b> (расчёт <span class="formula">K<sub>cl</sub><sup>IIM</sup></span> и <span class="formula">K<sub>q</sub><sup>CVaR</sup></span>), <b>PostgreSQL</b> (хранение артефактов и триплетов воспроизводимости). Связность — REST поверх FastAPI/httpx.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="label">Почему это эксперимент, а не наблюдение</div>
+    <p>Каждый пробег — это контролируемое воздействие на параметрический вход <span class="formula">(α, θ, σ, i_нач, seed, t)</span> при неизменном ядре модели. Мы не «наблюдаем каскад в природе», а систематически меняем начальные условия и смотрим, как выход метрики реагирует на эти изменения. Это соответствует классическому определению численного эксперимента над стохастической моделью.</p>
+  </div>
+
+  <div class="key-stats">
+    <div class="kpi"><span class="val">11</span><span class="lbl">сценариев в каталоге</span></div>
+    <div class="kpi"><span class="val">5000</span><span class="lbl">траекторий на сценарий</span></div>
+    <div class="kpi"><span class="val">60</span><span class="lbl">шагов по времени</span></div>
+    <div class="kpi"><span class="val">10 000</span><span class="lbl">bootstrap-итераций</span></div>
+  </div>
+
+  <a class="link" href="computer:///sessions/dazzling-kind-cray/mnt/diploma_repo/diploma/METHODOLOGY.md">Полная методика — METHODOLOGY.md</a>
 </section>
+
+<!-- =============== SLIDE B: ФАКТОРЫ И УРОВНИ =============== -->
+<section class="slide">
+  <div class="slide-no">Слайд Б — факторы</div>
+  <h2>Экспериментальные факторы и уровни</h2>
+  <div class="sub">Что меняется, по каким уровням и под какую гипотезу</div>
+
+  <table class="factor-table">
+    <thead>
+      <tr>
+        <th style="width:18%">Фактор</th>
+        <th style="width:10%">Обозн.</th>
+        <th style="width:32%">Уровни / диапазон</th>
+        <th style="width:15%">Тип</th>
+        <th style="width:25%">На какую гипотезу работает</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Интенсивность инициирующего шока</td>
+        <td><code>α</code></td>
+        <td>α ∈ {0.3, 0.5, 0.7, 0.9} — 4 уровня</td>
+        <td>варьируемый</td>
+        <td>H₁ (хвостовое доминирование)</td>
+      </tr>
+      <tr>
+        <td>Порог устойчивости узла</td>
+        <td><code>θ</code></td>
+        <td>θ ∈ {0.2, 0.35, 0.5} — 3 уровня</td>
+        <td>варьируемый</td>
+        <td>H₁ (хвостовое доминирование)</td>
+      </tr>
+      <tr>
+        <td>Амплитуда диффузии</td>
+        <td><code>σ</code></td>
+        <td>σ ∈ {0.10, 0.15, 0.23}</td>
+        <td>варьируемый</td>
+        <td>H₁, H₁ʹ (устойчивость)</td>
+      </tr>
+      <tr>
+        <td>Сектор-инициатор</td>
+        <td><code>i_нач</code></td>
+        <td>M⋆ (4) + out_M⋆ (2) + hist (5)</td>
+        <td>факторный</td>
+        <td>H₁, H₂</td>
+      </tr>
+      <tr>
+        <td>Горизонт усреднения</td>
+        <td><code>t</code></td>
+        <td><code>T_grid</code> = {1, 2, 3, 5, 7, 10, 20, 40, 60}</td>
+        <td>sweep</td>
+        <td>H₁ʹ (неизбыточность)</td>
+      </tr>
+      <tr>
+        <td>Детерминированный seed</td>
+        <td><code>seed</code></td>
+        <td>SHA256(SID‖i_recv) mod 2³²</td>
+        <td>контрольный</td>
+        <td>все — воспроизводимость</td>
+      </tr>
+      <tr>
+        <td>Исторический сценарий</td>
+        <td><code>SID_hist</code></td>
+        <td>Baltimore-24, Uri-21, India-12, UCTE-06</td>
+        <td>факторный</td>
+        <td>H₂ (валидность)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note"><b>Логика дизайна:</b> вместо полного факторного плана (что дало бы 4 × 3 × 3 × 11 = 396 ячеек) применяется <b>стратифицированная схема</b>: каталог из 11 сценариев задаёт «базовую сетку» секторов и параметров, а внутри каждой ячейки проводится sweep по <code>t</code> и bootstrap по траекториям. Это снижает число прогонов без потери статистической мощности для всех трёх гипотез.</div>
+
+  <a class="link" href="computer:///sessions/dazzling-kind-cray/mnt/diploma_repo/diploma/METHODOLOGY.md#catalog">Каталог сценариев — §2.5 METHODOLOGY.md</a>
+</section>
+
+<!-- =============== SLIDE C: PIPELINE =============== -->
+<section class="slide">
+  <div class="slide-no">Слайд В — схема прогона</div>
+  <h2>Схема одного экспериментального прогона</h2>
+  <div class="sub">Как один набор параметров превращается в строку результатов в базе</div>
+
+  <div class="pipeline">
+    <div class="node"><b>01 ВХОД</b><span>Параметры сценария <span class="formula">(SID, α, θ, σ, i_нач)</span></span></div>
+    <div class="node"><b>02 Seed</b><span><span class="formula">seed = SHA256(SID‖i_recv) mod 2³²</span></span></div>
+    <div class="node"><b>03 scenario_simulator</b><span>N = 5000 траекторий, T = 60 шагов, SDE + Skorokhod</span></div>
+    <div class="node"><b>04 risk_engine</b><span>Расчёт <span class="formula">K<sub>cl</sub><sup>IIM</sup></span>, <span class="formula">K<sub>q</sub><sup>CVaR</sup></span>, <span class="formula">K̃<sub>q</sub>(t)</span></span></div>
+    <div class="node"><b>05 PostgreSQL</b><span>Запись с триплетом <span class="formula">(seed, params_hash, git_commit)</span></span></div>
+  </div>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block" aria-label="Архитектура стенда">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#1E2761"/>
+          <stop offset="1" stop-color="#2F4A8A"/>
+        </linearGradient>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3E6FD9"/>
+        </marker>
+      </defs>
+
+      <!-- client -->
+      <rect x="20" y="90" width="140" height="60" rx="10" fill="#CADCFC" stroke="#1E2761" stroke-width="1.5"/>
+      <text x="90" y="115" text-anchor="middle" font-size="13" fill="#1E2761" font-weight="700">CLI / pytest</text>
+      <text x="90" y="135" text-anchor="middle" font-size="11" fill="#4A5578">клиент эксперимента</text>
+
+      <!-- arrow 1 -->
+      <line x1="160" y1="120" x2="230" y2="120" stroke="#3E6FD9" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="195" y="112" text-anchor="middle" font-size="10" fill="#4A5578">REST</text>
+
+      <!-- scenario_simulator -->
+      <rect x="230" y="80" width="180" height="80" rx="10" fill="url(#g1)"/>
+      <text x="320" y="110" text-anchor="middle" font-size="13" fill="#FFFFFF" font-weight="700">scenario_simulator</text>
+      <text x="320" y="128" text-anchor="middle" font-size="11" fill="#CADCFC">SDE + Skorokhod</text>
+      <text x="320" y="144" text-anchor="middle" font-size="11" fill="#CADCFC">:8001</text>
+
+      <!-- arrow 2 -->
+      <line x1="410" y1="120" x2="480" y2="120" stroke="#3E6FD9" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="445" y="112" text-anchor="middle" font-size="10" fill="#4A5578">траектории</text>
+
+      <!-- risk_engine -->
+      <rect x="480" y="80" width="180" height="80" rx="10" fill="url(#g1)"/>
+      <text x="570" y="110" text-anchor="middle" font-size="13" fill="#FFFFFF" font-weight="700">risk_engine</text>
+      <text x="570" y="128" text-anchor="middle" font-size="11" fill="#CADCFC">K_cl, K_q, bootstrap</text>
+      <text x="570" y="144" text-anchor="middle" font-size="11" fill="#CADCFC">:8002</text>
+
+      <!-- arrow 3 -->
+      <line x1="660" y1="120" x2="730" y2="120" stroke="#3E6FD9" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="695" y="112" text-anchor="middle" font-size="10" fill="#4A5578">JSON + hash</text>
+
+      <!-- postgres -->
+      <rect x="730" y="80" width="180" height="80" rx="10" fill="#E8EFFB" stroke="#1E2761" stroke-width="1.5"/>
+      <text x="820" y="110" text-anchor="middle" font-size="13" fill="#1E2761" font-weight="700">PostgreSQL</text>
+      <text x="820" y="128" text-anchor="middle" font-size="11" fill="#4A5578">Alembic-миграции</text>
+      <text x="820" y="144" text-anchor="middle" font-size="11" fill="#4A5578">seed + params_hash + commit</text>
+
+      <!-- top labels -->
+      <text x="500" y="30" text-anchor="middle" font-size="13" fill="#1E2761" font-weight="700">Архитектура стенда (3 микросервиса + CLI)</text>
+      <text x="500" y="50" text-anchor="middle" font-size="11" fill="#4A5578">REST/httpx-связность, loguru + Prometheus, контейнеризация Docker</text>
+
+      <!-- bottom obs -->
+      <rect x="230" y="190" width="680" height="36" rx="8" fill="#F2F7FF" stroke="#CADCFC"/>
+      <text x="570" y="213" text-anchor="middle" font-size="11" fill="#1E2761">наблюдаемость: loguru-логи, Prometheus-метрики времени отклика, трассировка через request_id</text>
+    </svg>
+  </div>
+
+  <div class="note"><b>Ключевой момент:</b> результат каждого прогона не перезаписывается, а добавляется новой строкой с уникальным триплетом. Это даёт полный аудит-след эксперимента — любую таблицу главы 3 можно воспроизвести до бита, запустив прогон с тем же <code>seed</code> и <code>params_hash</code> на том же <code>git_commit</code>.</div>
+</section>
+
+<!-- =============== SLIDE D: КОНТРОЛЬ И ВОСПРОИЗВОДИМОСТЬ =============== -->
+<section class="slide">
+  <div class="slide-no">Слайд Г — контроль</div>
+  <h2>Контроль достоверности и воспроизводимости</h2>
+  <div class="sub">Что фиксируется, как валидируется, как отвечает принципам FAIR</div>
+
+  <div class="row3">
+    <div class="card">
+      <div class="label">Контрольные переменные</div>
+      <p>Версия ядра SDE, численная схема Эйлера–Маруямы с шагом Δt = 1/60, границы Skorokhod-проекции [0; 1]ⁿ, версия риск-движка, состав каталога 11 сценариев.</p>
+    </div>
+    <div class="card">
+      <div class="label">Проверка валидности (H₂)</div>
+      <p>Backward-fit на 4 задокументированных каскадных событиях (Baltimore 2024, Texas Uri 2021, India 2012, UCTE 2006) с секторными параметрами из первоисточников.</p>
+    </div>
+    <div class="card">
+      <div class="label">Статистическая мощность</div>
+      <p>N = 5000 траекторий, B = 10 000 бутстрэп-итераций, поправка Холма–Бонферрони на семейство из 11 тестов в H₁.</p>
+    </div>
+  </div>
+
+  <div class="crit">
+    <div class="t">Триплет воспроизводимости — из чего складывается</div>
+    <ul>
+      <li><code>seed</code> = <span class="formula">SHA256(SID‖i_recv) mod 2³²</span> — детерминированный начальный вектор ГСЧ</li>
+      <li><code>params_hash</code> = 8-символьный префикс <span class="formula">SHA-256</span> JSON-сериализации секции <code>params</code> из <code>stage5_*.json</code></li>
+      <li><code>git_commit</code> — хэш HEAD кодовой базы на момент прогона (хранится в строке БД)</li>
+      <li>версия <code>Alembic</code>-миграции схемы БД — чтобы исключить несовместимости формата</li>
+    </ul>
+  </div>
+
+  <div class="crit">
+    <div class="t">Соответствие FAIR-принципам</div>
+    <ul>
+      <li><b>F</b>indable — каждая строка результатов идентифицируется триплетом и видна в рис. В.Seed приложения</li>
+      <li><b>A</b>ccessible — артефакты <code>stage5_*.json</code> лежат в репозитории диплома, стенд запускается из <code>docker-compose</code></li>
+      <li><b>I</b>nteroperable — JSON-схема выхода описана; метаданные <code>params_hash</code> сериализуются единообразно</li>
+      <li><b>R</b>eusable — при фиксированном триплете результат повторяется бит-в-бит на чужой машине</li>
+    </ul>
+  </div>
+
+  <a class="link" href="computer:///sessions/dazzling-kind-cray/mnt/diploma_repo/diploma/METHODOLOGY.md#reproducibility">Воспроизводимость — §2.9 METHODOLOGY.md</a>
+</section>
+
+<!-- =============== SLIDE E: ОЖИДАЕМЫЕ ИСХОДЫ =============== -->
+<section class="slide">
+  <div class="slide-no">Слайд Д — итог</div>
+  <h2>Что на выходе эксперимента получает исследование</h2>
+  <div class="sub">Связка: дизайн эксперимента → проверяемые гипотезы → артефакты ВКР</div>
+
+  <ol class="tasks">
+    <li><b>Для H₁:</b> 11 значений <span class="formula">Δ<sub>diff</sub></span> и 11 парных bootstrap-CI — визуализация в виде forest-plot (рис. В.3′).</li>
+    <li><b>Для H₁ʹ:</b> 9 значений ρ_Sp(t) на сетке <code>T_grid</code> с Fisher-CI, плюс диаграмма рассеяния при <span class="formula">t⋆ = 5</span> (рис. В.3ʺ, В.3‴).</li>
+    <li><b>Для H₂:</b> матрица ошибок 4 × 3 по историческим событиям и секторам + сводные метрики (каскад, секторы, MAE). Визуализация — рис. В.HistMat.</li>
+    <li><b>Для аудита:</b> таблица-манифест прогонов с триплетом воспроизводимости (рис. В.Seed).</li>
+    <li><b>Общий артефакт:</b> каждая цифра в главе 3 имеет обратную ссылку к строке в PostgreSQL, полученной конкретным прогоном стенда.</li>
+  </ol>
+
+  <div class="note"><b>Ценность такого дизайна для защиты:</b> эксперимент отделён от самой методики как самостоятельный блок, его можно обсуждать независимо от модели. Это даёт комиссии возможность оценить корректность проверки гипотез в отрыве от теоретических допущений SDE-ядра.</div>
+
+  <a class="link" href="computer:///sessions/dazzling-kind-cray/mnt/diploma_repo/diploma/METHODOLOGY.md">Полная методика — METHODOLOGY.md</a>
+</section>
+
+</body>
+</html>
