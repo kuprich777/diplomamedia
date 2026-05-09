@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<!-- saved from url=(0112)file:///Users/kuprich/Documents/diploma_repo/diploma/results/figures/defense/fig_03_evolution_3_4_semesters.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Эволюция исследования: 3-й + 4-й семестры — ВКР Куприянова</title>
+<style>
+  :root {
+    --primary:    #1a3a5e;
+    --primary-2:  #1f4e79;
+    --soft:       #e8f0fa;
+    --amber:      #ffc107;
+    --amber-bg:   #fff4e0;
+    --grey-bg:    #f0f2f5;
+    --green:      #2e7d32;
+    --green-bg:   #e8f5e9;
+    --grey-text:  #555;
+    --grey-soft:  #888;
+    --ink:        #212121;
+    --light-cyan: #b0c5dd;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    font-family: 'DejaVu Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--ink);
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  body { padding: 1.6rem 2.2rem 2.5rem; max-width: 1600px; margin: 0 auto; }
+
+  h1 {
+    color: var(--primary);
+    font-size: 1.65rem;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: var(--grey-text);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 0.3rem;
+  }
+  .semester-label {
+    color: var(--grey-soft);
+    font-size: 0.83rem;
+    margin-bottom: 1.6rem;
+    letter-spacing: 0.01em;
+  }
+  .subtitle code, .semester-label code {
+    background: #eef2f7;
+    color: var(--primary-2);
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.88em;
+  }
+
+  /* ===== Hero numbers ===== */
+  .hero-numbers {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.8rem;
+  }
+  .hero-tile {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.05rem 0.45rem 1rem;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+  .hero-tile .num {
+    font-size: 1.85rem;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+  }
+  .hero-tile .num.small { font-size: 1.5rem; }
+  .hero-tile .caption {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    margin-top: 0.4rem;
+    font-weight: 600;
+  }
+  .hero-tile .was {
+    font-size: 0.62rem;
+    color: var(--light-cyan);
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+
+  /* ===== Phase grid ===== */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: minmax(0, auto);
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+  .phase-card {
+    border-radius: 12px;
+    padding: 1.2rem 1.1rem;
+    position: relative;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+  .phase-card.phase-1 { background: var(--grey-bg); }
+  .phase-card.phase-2 { background: var(--soft); }
+  .phase-card.phase-3 { background: var(--amber-bg); }
+  .phase-card.phase-4 {
+    background: var(--primary);
+    color: #fff;
+    grid-column: span 2;
+    border: 3px solid var(--amber);
+  }
+  .phase-card.phase-5 {
+    background: var(--green-bg);
+    border: 1.5px solid var(--green);
+  }
+
+  .phase-card h3 {
+    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--primary);
+    line-height: 1.25;
+  }
+  .phase-card.phase-4 h3 { color: var(--amber); font-size: 1.1rem; }
+  .phase-card.phase-5 h3 { color: var(--green); }
+
+  .phase-card .period {
+    font-size: 0.74rem;
+    opacity: 0.7;
+    margin-bottom: 0.65rem;
+    letter-spacing: 0.02em;
+  }
+  .phase-card.phase-4 .period { opacity: 0.85; color: #d8e1eb; }
+
+  .phase-card ul {
+    margin: 0.4rem 0;
+    padding-left: 1.05rem;
+    font-size: 0.81rem;
+    line-height: 1.45;
+  }
+  .phase-card li { margin-bottom: 0.2rem; }
+  .phase-card li.warn::marker { color: #d97706; }
+  .phase-card li.ok::marker   { color: var(--green); }
+  .phase-card.phase-4 li::marker { color: var(--amber); }
+
+  .phase-card .hero-metric {
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 0.7rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    color: var(--primary);
+  }
+  .phase-card.phase-4 .hero-metric {
+    border-top: 1px solid rgba(255,255,255,0.3);
+    color: var(--amber);
+  }
+  .phase-card.phase-5 .hero-metric { color: var(--green); }
+
+  .phase-card code {
+    background: rgba(0,0,0,0.05);
+    color: var(--primary-2);
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.86em;
+  }
+  .phase-card.phase-4 code {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
+  /* Stage-table inside Phase 4 */
+  table.stages {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.74rem;
+    margin: 0.5rem 0 0.7rem;
+    color: #fff;
+  }
+  table.stages thead th {
+    background: rgba(255,255,255,0.10);
+    padding: 0.35rem 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+  }
+  table.stages tbody td {
+    padding: 0.32rem 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    vertical-align: top;
+  }
+  table.stages tbody tr:last-child td { border-bottom: none; }
+  table.stages td.gate { color: var(--amber); font-family: 'DejaVu Sans Mono', monospace; font-size: 0.72rem; }
+  table.stages td.t    { color: #d8e1eb; font-family: 'DejaVu Sans Mono', monospace; }
+  table.stages td.s    { font-weight: 600; }
+
+  .phase-4-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+  .phase-4-grid > div { font-size: 0.81rem; line-height: 1.45; }
+
+  /* ===== Tech stack ===== */
+  h2.section-title {
+    color: var(--primary);
+    font-size: 1.05rem;
+    margin: 1.5rem 0 0.6rem;
+    border-bottom: 1px solid #d8e1eb;
+    padding-bottom: 0.3rem;
+  }
+  .tech-stack {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.45rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .tech-stack .tech-name {
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .tech-stack .tech-where { color: var(--ink); }
+  .tech-stack code {
+    background: #eef2f7;
+    color: var(--primary-2);
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.88em;
+  }
+
+  /* ===== Verification badges ===== */
+  .verification-badges {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .badge {
+    background: var(--green-bg);
+    border: 2px solid var(--green);
+    border-radius: 8px;
+    padding: 0.85rem 0.7rem;
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .badge .badge-title {
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 0.3rem;
+    font-size: 0.88rem;
+  }
+  .badge .badge-value {
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    color: var(--ink);
+    font-size: 0.78rem;
+  }
+  .badge .badge-mark {
+    color: var(--green);
+    font-size: 1.05rem;
+    margin-top: 0.15rem;
+    display: block;
+  }
+
+  .footer-note {
+    font-size: 0.76rem;
+    color: var(--grey-text);
+    font-style: italic;
+    margin-top: 1.6rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #d8d8d8;
+    line-height: 1.55;
+  }
+  .footer-note code {
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.86em;
+    background: #f3f3f3;
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-style: normal;
+  }
+
+  /* ===== Adaptive ===== */
+  @media (max-width: 1200px) {
+    .hero-numbers { grid-template-columns: repeat(4, 1fr); }
+    .verification-badges { grid-template-columns: repeat(3, 1fr); }
+    .phase-4-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    body { padding: 1rem; }
+    .phase-grid { grid-template-columns: 1fr 1fr; }
+    .phase-card.phase-4 { grid-column: span 2; }
+    .verification-badges { grid-template-columns: repeat(2, 1fr); }
+    .tech-stack { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Фазы исследования: 3-й + 4-й семестры</h1>
+<p class="subtitle">ВКР «Оценка рисков инфраструктурных проектов: методика
+  и оценка кросс-отраслевых эффектов»
+</p>
+
+
+<!-- ===== Hero numbers ===== -->
+<div class="hero-numbers">
+
+  <div class="hero-tile">
+    <div class="num">7</div>
+    <div class="caption">КОНТЕЙНЕРОВ</div>
+    <div class="was">было: 5</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num">29</div>
+    <div class="caption">ПАР КАТАЛОГА</div>
+    <div class="was">было: 11</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num">4</div>
+    <div class="caption">МЕТРИКИ</div>
+    <div class="was">было: 1</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num">2</div>
+    <div class="caption">КАНАЛА ВОСПРОИЗВЕДЕНИЯ</div>
+    <div class="was">было: 1, CLI</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num">8</div>
+    <div class="caption">ИСТОРИЧЕСКИХ СОБЫТИЙ</div>
+    <div class="was">было: 4</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num">200</div>
+    <div class="caption">NULL-СЦЕНАРИЕВ</div>
+    <div class="was">было: 0</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num">2</div>
+    <div class="caption">ГИПОТЕЗЫ СО СТАТУСОМ</div>
+    <div class="was">было: 1</div>
+  </div>
+
+  <div class="hero-tile">
+    <div class="num small">0,0e+00</div>
+    <div class="caption">REST = CLI MAX DIFF</div>
+    <div class="was">новое</div>
+  </div>
+
+</div>
+
+<!-- ===== Phase grid ===== -->
+<div class="phase-grid">
+
+  <!-- Phase 1 -->
+  <div class="phase-card phase-1">
+    <h3>Phase 1. Базовая архитектура стенда</h3>
+    <div class="period">3 семестр · сентябрь – январь</div>
+    <ul>
+      <li>3 доменных сервиса: <code>energy</code> (8001), <code>water</code> (8002), <code>transport</code> (8003) — FastAPI + SQLAlchemy + PostgreSQL</li>
+      <li>REST-связность через <code>httpx.AsyncClient</code>, Docker Compose оркестрация</li>
+      <li>Первый <code>risk_engine</code> со статическим IIM Хаймса–Сантоса 2001: <code>K<sup>cl_IIM</sup> = (I−A)⁻¹u</code></li>
+      <li>Первый <code>scenario_simulator</code> с базовой Monte Carlo-петлёй</li>
+      <li>Семя <code>make_seed = SHA256(SID‖r) mod 2³²</code></li>
+    </ul>
+    <div class="hero-metric">5 контейнеров · 1 baseline · 11 пар каталога</div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase-card phase-2">
+    <h3>Phase 2. Стохастическая математика</h3>
+    <div class="period">граница 3 → 4 · январь – февраль</div>
+    <ul>
+      <li>СДУ <strong>Эйлер–Маруяма + Skorokhod-проекция</strong> на <code>[0,1]ⁿ</code></li>
+      <li>Калибровка σ через <strong>HAI ICS</strong> (1,3 млн набл.) + <strong>Kelmarsh SCADA</strong> (36 файлов), метод subsampled realized volatility (Чжан–Майкленд–Аит-Сахалия 2005)</li>
+      <li>σ_e = 0,152 · σ_w = 0,118</li>
+      <li><strong>DIIM Лиан–Хаймса (2006)</strong> — первый стохастический бейзлайн</li>
+      <li>Парный bootstrap CI95 (B = 10 000); матрица A через WIOD NIOT 2014, ρ_Spearman = 0,962</li>
+    </ul>
+    <div class="hero-metric">2 baseline · N_MC = 5 000 · B = 10 000</div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase-card phase-3">
+    <h3>Phase 3. Расширенная валидация и методологические правки</h3>
+    <div class="period">4 семестр · февраль – март</div>
+    <ul>
+      <li><strong>DebtRank Battiston (2012)</strong> — второй стохастический бейзлайн</li>
+      <li>4 события для H₂: Baltimore-2024, UCTE-2006, Texas-2021, India-2012</li>
+      <li>Холм–Бонферрони для FWER-контроля</li>
+      <li class="warn">Specificity-кризис: K_q^CVaR uncentered → <strong>FPR = 1,000</strong> на 200 null</li>
+      <li class="ok">Решение: <strong>центрирование с paired CRN</strong> (METHODOLOGY § 3.4) → FPR = 0,000</li>
+      <li>D1 → D1′: σ_τ с 0 → 0,023 (UK DfT, 1 827 набл.)</li>
+      <li class="warn">Эпизод SDWIS: σ_w^SDWIS = 0,0028 (×42 ниже Kelmarsh) — задокументирован</li>
+      <li class="warn">Scope refinement |A| ≥ 0,10 — отброшен, работа на полных 29 парах</li>
+      <li>Двух-семейная рамка: H₁⁽ᵇ⁾ vs DIIM + H₁⁽ᶜ⁾ vs DR (IIM в контекст)</li>
+    </ul>
+    <div class="hero-metric">3 baseline · FPR 1,0 → 0,0 · Holm m = 58</div>
+  </div>
+
+  <!-- Phase 4 — featured -->
+  <div class="phase-card phase-4">
+    <h3>★ Phase 4. B-FULL архитектура: 5-секторный REST-канал, bit-perfect эквивалентен CLI</h3>
+    <div class="period">4 семестр · апрель – май</div>
+
+    <div class="phase-4-grid">
+
+      <div>
+        <p style="margin: 0 0 0.5rem 0;">
+          После finding'а <strong>4 мая</strong> о том, что REST-канал
+          <code>scenario_simulator</code> работает только на 3 сектора и
+          не покрывает v2.3-метрики — выбран <strong style="color:var(--amber)">Variant B-FULL</strong>
+          (полная переархитектура) вместо B-MIN (быстрое смягчение).
+        </p>
+
+        <p style="margin: 0.4rem 0 0.3rem 0; font-weight: 700; color: var(--amber);">
+          Семь стадий за ~5 рабочих дней (план 5–7):
+        </p>
+
+        <table class="stages">
+          <thead><tr><th>St</th><th>Что</th><th>Gate</th><th>t</th></tr></thead>
+          <tbody>
+            <tr><td class="s">1</td><td>REST-эндпоинты операторов risk_engine (4 + paired_bootstrap)</td><td class="gate">|diff|=0,0</td><td class="t">25′</td></tr>
+            <tr><td class="s">2</td><td><code>ict_service</code> (8007) + <code>healthcare_service</code> (8008) — 5/7 NIS2</td><td class="gate">σ consistent</td><td class="t">25′</td></tr>
+            <tr><td class="s">3 ⚠</td><td>scenario_simulator 5-sector + paired CRN</td><td class="gate">bit-perfect 1×13</td><td class="t">30′</td></tr>
+            <tr><td class="s">4</td><td>PostgreSQL <code>experiment_runs</code> + Alembic</td><td class="gate">round-trip</td><td class="t">8′</td></tr>
+            <tr><td class="s">5</td><td>full v23 rerun via REST</td><td class="gate">bit-perfect 29×13</td><td class="t">5,8′</td></tr>
+            <tr><td class="s">6.B</td><td>production specificity, N=200 null</td><td class="gate">CP_up = 0,0149</td><td class="t">28′</td></tr>
+            <tr><td class="s">7</td><td>Word-агенты v5 + v6 + v6.1 + v6.2</td><td class="gate">text consol.</td><td class="t">отд. ветка</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <p style="margin: 0 0 0.4rem 0; font-weight: 700; color: var(--amber);">
+          Дополнительные результаты:
+        </p>
+        <ul>
+          <li>+4 события H₂: T-Mobile-2020, CenturyLink-2018, Change-Healthcare-2024, Mumbai-2017 — расширенная подгруппа ИКТ / healthcare</li>
+          <li>Каталог: 11 → <strong>29 пар</strong> (12 M* + 4 out_M* + 13 hist)</li>
+          <li>σ_ICT = 0,000 267 (CRS R48776) · σ_Q = 0,002 348 (HIPAA Journal 2024)</li>
+          <li>Bit-perfect <strong>REST = CLI</strong> на 29 пар × 13 метрик = <strong>377 значений</strong>, max abs diff = <code>0,0e+00</code></li>
+          <li>Floor-критерий принятия H₁: <code>⌊0,9·N_пар⌋ = 26</code> (вместо ceil)</li>
+          <li>PostgreSQL persistence: триплет seed / params_hash / image_digest, ACID-фиксация</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="hero-metric">7 контейнеров · 29 пар · REST = CLI 0,0e+00 · 377 числовых значений совпадают</div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase-card phase-5">
+    <h3>Phase 5. Финализация и защита</h3>
+    <div class="period">4 семестр · май (текущий момент)</div>
+    <ul>
+      <li class="ok"><strong>H₁⁽ВКР⁾ ПРИНЯТА:</strong> 26/29 (DIIM) + 28/29 (DR), порог = ⌊0,9·29⌋ = 26</li>
+      <li class="ok"><strong>Specificity:</strong> 0/200 · CP up95 = 0,0149 &lt; α = 0,05</li>
+      <li class="ok"><strong>REST = CLI</strong> bit-perfect на 29 × 13 = 377</li>
+      <li class="warn"><strong>H₂ частично:</strong> MAE ≤ 0,25 для всех 4 метрик; векторный C₂ = 32/32 не пройден на расширенной подгруппе → roadmap § 4.3.1</li>
+      <li>Word-агенты v5 + v6 + v6.1 + v6.2 (investor refocus, метод. консолидация, floor-критерий)</li>
+      <li>10 figures в <code>results/figures/defense/</code> + 2 HTML-странички (архитектура, дизайн эксперимента)</li>
+    </ul>
+    <div class="hero-metric">H₁ ✓ &nbsp;·&nbsp; Specificity ✓ &nbsp;·&nbsp; REST=CLI ✓ &nbsp;·&nbsp; H₂ ⚠</div>
+  </div>
+
+</div>
+
+<!-- ===== Tech stack ===== -->
+<h2 class="section-title">Технологический стек</h2>
+<div class="tech-stack">
+  <div class="tech-name">FastAPI + httpx.AsyncClient</div>
+  <div class="tech-where">REST-связность 7 микросервисов, async-оркестрация Monte Carlo</div>
+
+  <div class="tech-name">PostgreSQL 16 + Alembic</div>
+  <div class="tech-where">Persistence <code>experiment_runs</code> (Stage 4): seed · params_hash · image_digest · results JSONB · run_id</div>
+
+  <div class="tech-name">NumPy + SciPy.stats</div>
+  <div class="tech-where">SDE Эйлер–Маруяма + Skorokhod-проекция, paired bootstrap, Holm–Bonferroni, Clopper–Pearson exact CI</div>
+
+  <div class="tech-name">Docker Compose</div>
+  <div class="tech-where">Оркестрация 7 контейнеров + diploma-db (PostgreSQL :5433)</div>
+
+  <div class="tech-name">Pytest + Coverage</div>
+  <div class="tech-where">Регрессионные тесты Stage 6: <code>tests/b_full/</code>, <code>tests/test_sde_integrator.py</code>, <code>tests/test_superiority.py</code></div>
+
+  <div class="tech-name">Loguru + Prometheus</div>
+  <div class="tech-where">JSON Lines-логи, Prometheus-метрики, трассировка через <code>request_id</code> и <code>run_id</code></div>
+
+  <div class="tech-name">6 открытых источников</div>
+  <div class="tech-where">WIOD NIOT 2014 + HAI ICS Honeypot + Kelmarsh SCADA + UK DfT TRA0307 + CRS R48776 + HIPAA Journal 2024</div>
+</div>
+
+<!-- ===== Verification badges ===== -->
+<h2 class="section-title">Верификационные критерии (B-FULL Stage 5–6.B)</h2>
+<div class="verification-badges">
+
+  <div class="badge">
+    <div class="badge-title">H₁<sup>(ВКР)</sup></div>
+    <div class="badge-value">family = (b) ∧ (c)</div>
+    <span class="badge-mark">ПРИНЯТА ✓</span>
+  </div>
+
+  <div class="badge">
+    <div class="badge-title">H₁<sup>(b)</sup> vs DIIM</div>
+    <div class="badge-value">26/29 ≥ 26</div>
+    <span class="badge-mark">ПРИНЯТА ✓</span>
+  </div>
+
+  <div class="badge">
+    <div class="badge-title">H₁<sup>(c)</sup> vs DR</div>
+    <div class="badge-value">28/29 ≥ 26</div>
+    <span class="badge-mark">ПРИНЯТА ✓</span>
+  </div>
+
+  <div class="badge">
+    <div class="badge-title">Specificity</div>
+    <div class="badge-value">0/200 · CP = 0,0149</div>
+    <span class="badge-mark">≤ α = 0,05 ✓</span>
+  </div>
+
+  <div class="badge">
+    <div class="badge-title">REST = CLI</div>
+    <div class="badge-value">max |diff| = 0,0e+00</div>
+    <span class="badge-mark">bit-perfect ✓</span>
+  </div>
+
+</div>
+
+<p class="footer-note">
+  Источники:
+  <code>results/b_full/baselines_comparison_v23_b_full.json</code> (Stage 5,
+  29 пар × 5000 MC × 10000 boot, Holm m = 58, порог
+  <code>floor(0,9·N_пар) = 26</code>);
+  <code>results/b_full/specificity_centered_v23_b_full.json</code> (Stage 6.B,
+  N = 200 null, Clopper–Pearson exact CI);
+  <code>results/b_full/stage5_full_v23_rest_vs_cli.json</code> (REST = CLI
+  verification, max abs diff = 0,0e+00 по всем 13 метрикам).
+  B-FULL ветка: <code>b-full-5sector-rest</code> от <code>newmain @ aa2a6e4</code>
+  (2026-05-04). Master plan: <code>/diploma/b_full_master_plan.md</code>.
+</p>
+
+
+
+</body></html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<!-- saved from url=(0106)file:///Users/kuprich/Documents/diploma_repo/diploma/results/figures/defense/fig_02_design_experiment.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дизайн эксперимента — ВКР Куприянова</title>
+<style>
+  :root {
+    --primary:    #1a3a5e;
+    --primary-2:  #1f4e79;
+    --soft:       #e8f0fa;
+    --bg-soft:    #f0f4f8;
+    --zebra:      #f5f7fa;
+    --amber:      #b07a1a;
+    --grey-text:  #555;
+    --grey-soft:  #777;
+    --ink:        #212121;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    font-family: 'DejaVu Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--ink);
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+  body { padding: 1.6rem 2.2rem 2.5rem; max-width: 1600px; margin: 0 auto; }
+
+  h1 {
+    color: var(--primary);
+    font-size: 1.7rem;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+  .lead {
+    color: var(--grey-text);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+  .lead code {
+    background: #eef2f7;
+    color: var(--primary-2);
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.88em;
+  }
+
+  h2.section-title {
+    color: var(--primary);
+    font-size: 1.12rem;
+    margin: 1.6rem 0 0.7rem;
+    border-bottom: 1px solid #d8e1eb;
+    padding-bottom: 0.3rem;
+  }
+
+  /* ===== BLOCK 1: Pipeline ===== */
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.55rem;
+    margin-bottom: 1.6rem;
+  }
+  .pipeline-box {
+    position: relative;
+    border: 1.5px solid var(--primary-2);
+    border-radius: 6px;
+    padding: 0.85rem 0.85rem 0.9rem;
+    background: #ffffff;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+  .pipeline-box .step-num {
+    font-weight: 700;
+    color: var(--primary-2);
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+    display: block;
+  }
+  .pipeline-box .step-title {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.4rem;
+    font-size: 0.86rem;
+  }
+  .pipeline-box .step-body {
+    color: var(--ink);
+    font-size: 0.79rem;
+  }
+  .pipeline-box::after {
+    content: "▶";
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translate(50%, -50%);
+    color: var(--primary-2);
+    font-size: 0.95rem;
+    background: #fff;
+    padding: 0 0.05rem;
+    z-index: 2;
+  }
+  .pipeline-box:last-child::after { content: ""; }
+  .pipeline-box code {
+    background: #eef2f7;
+    color: var(--primary-2);
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.84em;
+  }
+
+  /* ===== BLOCK 2: Architecture ===== */
+  .architecture {
+    background: var(--bg-soft);
+    border-radius: 12px;
+    padding: 1.4rem 1.4rem 1.2rem;
+    margin-bottom: 1.6rem;
+    border: 1px solid #d8e1eb;
+  }
+  .architecture .arch-sub {
+    font-size: 0.85rem;
+    color: var(--grey-text);
+    margin: 0 0 1.1rem 0;
+    line-height: 1.5;
+  }
+  .arch-row { display: flex; gap: 1rem; align-items: stretch; justify-content: center; flex-wrap: wrap; }
+  .arch-col-center { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; margin: 0.4rem 0; }
+  .arrow-line { width: 2px; background: var(--primary-2); height: 18px; }
+  .arrow-down { font-size: 1.3rem; color: var(--primary-2); line-height: 1; }
+  .channel-tag {
+    font-size: 0.72rem;
+    color: var(--primary-2);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: #fff;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--primary-2);
+    border-radius: 3px;
+  }
+
+  .service-box {
+    border-radius: 5px;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .service-box .name { font-weight: 700; font-size: 0.92rem; margin-bottom: 0.18rem; letter-spacing: 0.01em; }
+  .service-box .port {
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.76rem;
+    opacity: 0.92;
+    margin-bottom: 0.2rem;
+  }
+  .service-box .meta { font-size: 0.73rem; opacity: 0.92; line-height: 1.3; }
+  .service-box code {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    padding: 0 0.2rem;
+    border-radius: 2px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.85em;
+  }
+  .domain   { background: var(--primary-2); color: #fff; min-width: 155px; }
+  .orchestr { background: var(--primary);   color: #fff; min-width: 230px; }
+  .persist  { background: var(--amber);     color: #fff; min-width: 280px; }
+
+  .domain-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.7rem;
+  }
+
+  .arch-notes {
+    margin-top: 1rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed #b9c8d8;
+    color: var(--grey-soft);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    font-style: italic;
+    text-align: center;
+  }
+  .arch-notes b { color: var(--primary); font-style: normal; }
+
+  /* ===== BLOCK 3: Info cards ===== */
+  .info-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    margin-bottom: 1.6rem;
+  }
+  .info-card {
+    background: var(--soft);
+    border-radius: 12px;
+    padding: 1.3rem 1.4rem;
+  }
+  .info-card .label {
+    color: var(--primary);
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 0.65rem;
+  }
+  .info-card .text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .info-card .text strong { color: var(--primary); }
+  .info-card .text code {
+    background: rgba(255,255,255,0.7);
+    color: var(--primary);
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.86em;
+    padding: 0 0.25rem;
+    border-radius: 2px;
+  }
+
+  /* ===== BLOCK 4: Hero number tiles ===== */
+  .hero-numbers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+  }
+  .number-tile {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.45rem 0.85rem 1.35rem;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  }
+  .number-tile .num {
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+  }
+  .number-tile .caption {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+    opacity: 0.95;
+    font-weight: 600;
+  }
+  .tiles-row + .tiles-row { margin-top: 0; }
+
+  /* ===== BLOCK 5: Factor table ===== */
+  table.factors {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    margin-top: 0.6rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  table.factors thead {
+    background: var(--primary);
+    color: #fff;
+  }
+  table.factors thead th {
+    padding: 0.9rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+  table.factors tbody tr:nth-child(even) { background: var(--zebra); }
+  table.factors tbody td {
+    padding: 0.78rem 0.75rem;
+    vertical-align: top;
+    border-bottom: 1px solid #eaeaea;
+    line-height: 1.45;
+  }
+  table.factors tbody tr:last-child td { border-bottom: none; }
+  table.factors tbody td.factor { font-weight: 600; color: var(--primary); width: 19%; }
+  table.factors tbody td.symbol {
+    width: 10%;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    color: var(--primary-2);
+  }
+  table.factors tbody td.type   { width: 12%; color: var(--grey-text); }
+  table.factors tbody td.h      { width: 19%; }
+  table.factors tbody td code {
+    background: #eef2f7;
+    color: var(--primary-2);
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.86em;
+  }
+  table.factors tbody tr:nth-child(even) td code { background: #ffffff; }
+
+  /* ===== Footer ===== */
+  .footer-note {
+    font-size: 0.76rem;
+    color: var(--grey-text);
+    font-style: italic;
+    margin-top: 1.6rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #d8d8d8;
+    line-height: 1.55;
+  }
+  .footer-note code {
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.86em;
+    background: #f3f3f3;
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-style: normal;
+  }
+
+  /* ===== Adaptive ===== */
+  @media (max-width: 1200px) {
+    .pipeline { grid-template-columns: repeat(3, 1fr); }
+    .pipeline-box::after { display: none; }
+    .domain-row { grid-template-columns: repeat(3, 1fr); }
+    .info-cards { grid-template-columns: 1fr; }
+    .hero-numbers { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    body { padding: 1rem; }
+    .pipeline { grid-template-columns: 1fr 1fr; }
+    .domain-row { grid-template-columns: 1fr 1fr; }
+    table.factors { font-size: 0.8rem; }
+    table.factors tbody td.factor { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Дизайн эксперимента</h1>
+<p class="lead">
+  Куприянова В. П. · ВКР «Оценка рисков инфраструктурных проектов: методика
+  и оценка кросс-отраслевых эффектов»<br>
+  Ветка <code>b-full-5sector-rest</code> · Production REST-серия · 2026-05-09
+</p>
+
+<!-- ============== BLOCK 1: Pipeline ============== -->
+<h2 class="section-title">Pipeline сценария прогона (1 сценарий × 1 пара × 1 прогон)</h2>
+<div class="pipeline">
+
+  <div class="pipeline-box">
+    <span class="step-num">01</span>
+    <div class="step-title">ВХОД</div>
+    <div class="step-body">
+      Параметры сценария: <code>SID</code>, α, θ_node, σ_i, i_initiator, i_recv,
+      α_tail, T_steps, N_MC, B_boot
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <span class="step-num">02</span>
+    <div class="step-title">SEED</div>
+    <div class="step-body">
+      <code>seed = SHA256(SID‖i_recv‖r) mod 2³²</code><br>
+      <code>numpy.random.default_rng(seed)</code> · запрет stdlib <code>random</code>
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <span class="step-num">03</span>
+    <div class="step-title">SCENARIO_SIMULATOR</div>
+    <div class="step-body">
+      N = 5000 траекторий · T = 60 шагов · SDE Эйлера–Маруямы
+      + Skorokhod-проекция на <code>[0, 1]⁵</code>
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <span class="step-num">04</span>
+    <div class="step-title">RISK_ENGINE</div>
+    <div class="step-body">
+      Расчёт <code>K<sup>cl_IIM</sup></code>, <code>K<sup>DIIM</sup></code>,
+      <code>K<sup>DR</sup></code>, <code>K<sub>q</sub><sup>centered</sup></code>
+      на paired CRN · paired bootstrap CI95 (B = 10 000)
+    </div>
+  </div>
+
+  <div class="pipeline-box">
+    <span class="step-num">05</span>
+    <div class="step-title">POSTGRESQL</div>
+    <div class="step-body">
+      Запись с триплетом (<code>seed</code>, <code>params_hash</code>,
+      <code>image_digest</code>) · ACID + Alembic · <code>run_id</code>;
+      <code>GET /api/v1/runs/{id}</code> → JSON
+    </div>
+  </div>
+
+</div>
+
+<!-- ============== BLOCK 2: Architecture (REST-only) ============== -->
+<h2 class="section-title">Архитектура стенда: REST-цепочка production-серии</h2>
+
+<div class="architecture">
+
+  <p class="arch-sub">
+    Микросервисный стенд из 7 контейнеров (Docker Compose). REST/httpx-связность,
+    loguru + Prometheus наблюдаемость, PostgreSQL ACID-фиксация триплета каждого прогона.
+    Все production-результаты получены прогонами цепочки
+    <strong>scenario_simulator → risk_engine → PostgreSQL experiment_runs</strong>.
+  </p>
+
+  <!-- ROW 1: scenario_simulator -->
+  <div class="arch-row">
+    <div class="service-box orchestr">
+      <div class="name">scenario_simulator</div>
+      <div class="port">:8005 · /api/v1/simulator/research_run</div>
+      <div class="meta">N = 5000 paired CRN MC · T = 60 · SDE Эйлера–Маруямы</div>
+    </div>
+  </div>
+
+  <div class="arch-col-center">
+    <span class="channel-tag">REST · к 5 доменным сервисам, асинхронно</span>
+    <div class="arrow-line"></div>
+    <div class="arrow-down">▼</div>
+  </div>
+
+  <!-- ROW 2: 5 domain services -->
+  <div class="domain-row">
+    <div class="service-box domain">
+      <div class="name">energy_service</div>
+      <div class="port">:8001</div>
+      <div class="meta">σ_e = 0,152<br>HAI ICS Honeypot</div>
+    </div>
+    <div class="service-box domain">
+      <div class="name">water_service</div>
+      <div class="port">:8002</div>
+      <div class="meta">σ_w = 0,118<br>Kelmarsh SCADA</div>
+    </div>
+    <div class="service-box domain">
+      <div class="name">transport_service</div>
+      <div class="port">:8003</div>
+      <div class="meta">σ_τ = 0,023<br>UK DfT TRA0307</div>
+    </div>
+    <div class="service-box domain">
+      <div class="name">ict_service</div>
+      <div class="port">:8007</div>
+      <div class="meta">σ_ICT = 2,67·10⁻⁴<br>CRS R48776</div>
+    </div>
+    <div class="service-box domain">
+      <div class="name">healthcare_service</div>
+      <div class="port">:8008</div>
+      <div class="meta">σ_Q = 2,35·10⁻³<br>HIPAA Journal 2024</div>
+    </div>
+  </div>
+
+  <div class="arch-col-center">
+    <div class="arrow-line"></div>
+    <div class="arrow-down">▼</div>
+    <span class="channel-tag">REST · агрегация состояний x(t) → operators</span>
+  </div>
+
+  <!-- ROW 3: risk_engine -->
+  <div class="arch-row">
+    <div class="service-box orchestr">
+      <div class="name">risk_engine</div>
+      <div class="port">:8004 · /api/v1/operators/*</div>
+      <div class="meta">
+        K<sup>cl_IIM</sup> · K<sup>DIIM</sup> · K<sup>DR</sup> · K<sub>q</sub><sup>centered</sup>
+        + <code>paired_bootstrap</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-col-center">
+    <div class="arrow-line"></div>
+    <div class="arrow-down">▼</div>
+    <span class="channel-tag" style="border-style: dotted;">JSON + run_id</span>
+  </div>
+
+  <!-- ROW 4: PostgreSQL -->
+  <div class="arch-row">
+    <div class="service-box persist">
+      <div class="name">PostgreSQL · diploma-db</div>
+      <div class="port">:5433 (host) → :5432 (container)</div>
+      <div class="meta">
+        Alembic-миграции · ACID · <code>experiment_runs</code><br>
+        (seed · params_hash · image_digest · results JSONB · run_id)
+      </div>
+    </div>
+  </div>
+
+  <div class="arch-notes">
+    <b>наблюдаемость:</b> loguru-логи (JSON Lines), Prometheus-метрики
+    времени отклика, трассировка через <code>request_id</code> и <code>run_id</code>.
+    &nbsp;<b>детерминизм:</b> <code>numpy.random.default_rng(make_seed(SID, r))</code>.
+    &nbsp;<b>сериализация:</b> numpy ↔ JSON.
+  </div>
+
+</div>
+
+<!-- ============== BLOCK 3: Info cards ============== -->
+<div class="info-cards">
+
+  <div class="info-card">
+    <div class="label">СУБЪЕКТ ЭКСПЕРИМЕНТА</div>
+    <div class="text">
+      Математическая модель распространения отказа — стохастическое
+      дифференциальное уравнение (<strong>SDE, § 2.6</strong>) с численной
+      схемой <strong>Эйлера–Маруямы</strong> и <strong>Skorokhod-проекцией</strong>
+      на ограниченный симплекс состояний <code>[0, 1]⁵</code>
+      5-секторной модели NIS2. Хвостовая метрика —
+      <strong>центрированная CVaR-агрегация</strong>
+      <code>K<sub>q</sub><sup>(centered)</sup></code> с парными общими
+      случайными числами </div>
+  </div>
+
+  <div class="info-card">
+    <div class="label">ЭКСПЕРИМЕНТАЛЬНАЯ УСТАНОВКА</div>
+    <div class="text">
+      Микросервисный стенд из 7 контейнеров (Docker Compose):
+      <strong>scenario_simulator</strong> (порт 8005, оркестрация MC через REST),
+      <strong>risk_engine</strong> (порт 8004, расчёт <code>K<sup>(cl_IIM)</sup></code>,
+      <code>K<sup>(DIIM)</sup></code>, <code>K<sup>(DR)</sup></code>,
+      <code>K<sub>q</sub><sup>(centered)</sup></code>),
+      <strong>5 доменных сервисов</strong> (energy 8001, water 8002,
+      transport 8003, ICT 8007, healthcare 8008),
+      <strong>PostgreSQL</strong> с Alembic-миграциями (таблица
+      <code>experiment_runs</code>, ACID-фиксация триплета
+      <code>seed/params_hash/image_digest</code>).
+      Связность — REST поверх FastAPI / httpx;
+      все production-результаты получены прогонами цепочки
+      <strong>scenario_simulator → risk_engine → PostgreSQL experiment_runs</strong>.
+    </div>
+  </div>
+
+</div>
+
+<!-- ============== BLOCK 4: Hero number tiles ============== -->
+<h2 class="section-title">Параметры production-серии</h2>
+
+<div class="hero-numbers tiles-row">
+  <div class="number-tile">
+    <div class="num">29</div>
+    <div class="caption">СЦЕНАРИЕВ В КАТАЛОГЕ</div>
+  </div>
+  <div class="number-tile">
+    <div class="num">5 000</div>
+    <div class="caption">ТРАЕКТОРИЙ НА СЦЕНАРИЙ</div>
+  </div>
+  <div class="number-tile">
+    <div class="num">60</div>
+    <div class="caption">ШАГОВ ПО ВРЕМЕНИ</div>
+  </div>
+  <div class="number-tile">
+    <div class="num">10 000</div>
+    <div class="caption">BOOTSTRAP-ИТЕРАЦИЙ</div>
+  </div>
+</div>
+
+<div class="hero-numbers tiles-row">
+  <div class="number-tile">
+    <div class="num">8</div>
+    <div class="caption">ИСТОРИЧЕСКИХ СОБЫТИЙ</div>
+  </div>
+  <div class="number-tile">
+    <div class="num">200</div>
+    <div class="caption">NULL-СЦЕНАРИЕВ SPECIFICITY</div>
+  </div>
+  <div class="number-tile">
+    <div class="num">5 / 7</div>
+    <div class="caption">NIS2 ESSENTIAL ENTITIES</div>
+  </div>
+  <div class="number-tile">
+    <div class="num">58</div>
+    <div class="caption">HOLM–BONFERRONI m</div>
+  </div>
+</div>
+
+<!-- ============== BLOCK 5: Factor table ============== -->
+<h2 class="section-title">Факторный план эксперимента</h2>
+<table class="factors">
+  <thead>
+    <tr>
+      <th>Фактор</th>
+      <th>Обозн.</th>
+      <th>Уровни / диапазон</th>
+      <th>Тип</th>
+      <th>На какую гипотезу работает</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td class="factor">Интенсивность инициирующего шока</td>
+      <td class="symbol">α</td>
+      <td>По каталогу: M* — α ∈ {0,01; 0,30; 0,40; 0,70}; <em>hist</em> — реконструкция из регуляторных отчётов</td>
+      <td class="type">факторный</td>
+      <td class="h">H₁ (хвостовое доминирование)</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Порог устойчивости узла</td>
+      <td class="symbol">θ</td>
+      <td>θ ∈ {0,70; 0,75} — UCTE-2006: диагностика граничного артефакта</td>
+      <td class="type">контрольный</td>
+      <td class="h">H₁</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Амплитуда диффузии (5 секторов)</td>
+      <td class="symbol">σ</td>
+      <td>
+        σ_e = 0,152 (HAI ICS); σ_w = 0,118 (Kelmarsh); σ_τ = 0,023 (UK DfT);
+        σ_ICT = 2,67·10⁻⁴ (CRS R48776); σ_Q = 2,35·10⁻³ (HIPAA Journal 2024)
+      </td>
+      <td class="type">контрольный</td>
+      <td class="h">H₁ (calibration), H₁′ (sensitivity)</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Сектор-инициатор</td>
+      <td class="symbol">i_нач</td>
+      <td>M* (12) + out_M* (4) + hist (13) = <strong>29 пар</strong> на 5-секторной модели</td>
+      <td class="type">факторный</td>
+      <td class="h">H₁, H₂</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Метрика сравнения</td>
+      <td class="symbol">K</td>
+      <td>
+        <code>K<sup>(cl_IIM)</sup></code> (контекст),
+        <code>K<sup>(DIIM)</sup></code> (семейство <em>b</em>),
+        <code>K<sup>(DR)</sup></code> (семейство <em>c</em>),
+        <strong><code>K<sub>q</sub><sup>(centered)</sup></code></strong> (предлагаемая)
+      </td>
+      <td class="type">сравнительный</td>
+      <td class="h">H₁ family + контекст IIM</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Поправка множественности</td>
+      <td class="symbol">Holm m</td>
+      <td>m = 2 · N_пар = <strong>58</strong> (двух-семейная), FWER = 0,05</td>
+      <td class="type">контрольный</td>
+      <td class="h">H₁ family-wise control</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Детерминированный seed</td>
+      <td class="symbol">seed</td>
+      <td><code>make_seed = SHA256(SID‖r) mod 2³²</code></td>
+      <td class="type">контрольный</td>
+      <td class="h">все — воспроизводимость</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Исторический сценарий</td>
+      <td class="symbol">SID_hist</td>
+      <td>
+        <strong>8 событий:</strong> Baltimore-2024, UCTE-2006, Texas-2021, India-2012 (база) +
+        T-Mobile-2020, CenturyLink-2018, Change-Healthcare-2024, Mumbai-2017 (расширение ИКТ / healthcare)
+      </td>
+      <td class="type">факторный</td>
+      <td class="h">H₂ (валидность)</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Null-сценарий</td>
+      <td class="symbol">u_null</td>
+      <td><code>u_j ~ Uniform(0; 0,025)⁵</code>, <strong>200 реализаций</strong></td>
+      <td class="type">контрольный</td>
+      <td class="h">specificity (Clopper–Pearson up95)</td>
+    </tr>
+
+    <tr>
+      <td class="factor">Persistence</td>
+      <td class="symbol">run_id</td>
+      <td>
+        Каждый прогон фиксируется в <code>experiment_runs</code> PostgreSQL
+        с триплетом (<code>seed</code>, <code>params_hash</code>, <code>image_digest</code>);
+        <code>GET /api/v1/runs/{run_id}</code> → JSON
+      </td>
+      <td class="type">контрольный</td>
+      <td class="h">воспроизводимость и аудит</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Методика проверки гипотез — ВКР Куприянова</title>
+<meta name="description" content="Двух-семейная гипотеза H₁⁽ВКР⁾ и векторная валидация H₂ на 8 исторических событиях. ВКР Куприянова В. П., 2026, МФТИ.">
+<style>
+  :root {
+    --primary:    #1a3a5e;
+    --primary-2:  #1f4e79;
+    --info-bg:    #e8f0fa;
+    --step-bg:    #f0f4f8;
+    --accept-bg:  #e8f5e9;
+    --accept:     #2e7d32;
+    --reject:     #c00000;
+    --grey-text:  #555;
+    --ink:        #212121;
+    --border:     #d8e1eb;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    font-family: 'DejaVu Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--ink);
+    background: #f8fafb;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+  }
+
+  /* ===== Header ===== */
+  .site-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 0.9rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .site-header .brand {
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+  .site-header nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
+  .site-header nav a {
+    color: #cfd8e3;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.15s ease;
+  }
+  .site-header nav a:hover { color: #fff; }
+  .site-header nav a.active { color: #ffc107; font-weight: 600; }
+
+  /* ===== Page ===== */
+  .page-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.8rem 3rem;
+    background: #fff;
+  }
+  h1 {
+    color: var(--primary);
+    font-size: 1.7rem;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.01em;
+  }
+  .page-subtitle {
+    color: var(--grey-text);
+    font-size: 1rem;
+    margin: 0 0 2rem 0;
+    line-height: 1.55;
+  }
+
+  /* ===== Hypothesis block ===== */
+  .hypothesis-block { margin-bottom: 3rem; }
+  .hypothesis-block h2 {
+    color: var(--primary);
+    font-size: 1.35rem;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.35;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hyp-formula {
+    background: var(--info-bg);
+    padding: 0.18rem 0.55rem;
+    border-radius: 4px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 1rem;
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .hyp-subtitle {
+    color: var(--primary-2);
+    font-size: 0.95rem;
+    margin: 0 0 1.4rem 0;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  /* ===== Steps ===== */
+  .method-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    background: var(--step-bg);
+    border-radius: 8px;
+    padding: 0.95rem 1.15rem;
+    margin-bottom: 0.7rem;
+  }
+  .step-circle {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 0.05rem;
+  }
+  .step-text {
+    font-size: 0.93rem;
+    line-height: 1.55;
+  }
+  .step-text strong { color: var(--primary); }
+  .formula {
+    background: var(--info-bg);
+    padding: 0.05rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.86rem;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+
+  /* ===== Acceptance plate ===== */
+  .acceptance-criterion {
+    background: var(--accept-bg);
+    border: 2px solid var(--accept);
+    border-radius: 8px;
+    padding: 1.15rem 1.35rem;
+    margin-top: 1.1rem;
+  }
+  .acceptance-criterion .ac-title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.7rem;
+  }
+  .acceptance-criterion ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .acceptance-criterion li {
+    padding: 0.35rem 0 0.35rem 1.4rem;
+    position: relative;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+  .acceptance-criterion li::before {
+    content: "●";
+    position: absolute;
+    left: 0;
+    top: 0.32rem;
+    font-size: 1.05rem;
+  }
+  .acceptance-criterion li.accept::before { color: var(--accept); }
+  .acceptance-criterion li.reject::before { color: var(--reject); }
+  .acceptance-criterion li strong { color: var(--primary); }
+
+  /* ===== Footer ===== */
+  .footer-note {
+    font-size: 0.78rem;
+    color: var(--grey-text);
+    font-style: italic;
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #d8d8d8;
+    line-height: 1.6;
+  }
+  .footer-note code {
+    font-family: 'DejaVu Sans Mono', 'Courier New', monospace;
+    font-size: 0.92em;
+    background: #f3f3f3;
+    padding: 0 0.25rem;
+    border-radius: 2px;
+    font-style: normal;
+  }
+
+  /* ===== Adaptive ===== */
+  @media (max-width: 768px) {
+    .site-header {
+      padding: 0.8rem 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .site-header nav { gap: 0.3rem 1rem; }
+    .page-content { padding: 1.4rem 1rem 2rem; }
+    h1 { font-size: 1.4rem; }
+    .hypothesis-block h2 { font-size: 1.15rem; }
+    .method-step { padding: 0.85rem 0.95rem; gap: 0.7rem; }
+    .step-circle { width: 28px; height: 28px; font-size: 0.85rem; }
+    .formula { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">ВКР Куприянова · 2026</div>
+  <nav>
+    <a href="../index.html">Главная</a>
+    <a href="methodology.html" class="active">Методология</a>
+    <a href="design-experiment.html">Дизайн эксперимента</a>
+    <a href="evolution.html">Эволюция работы</a>
+  </nav>
+</header>
+
+<main class="page-content">
+
+  <h1>Методика проверки гипотез</h1>
+  <p class="page-subtitle">
+    Двух-семейная семейная гипотеза H₁<sup>(ВКР)</sup> + векторная валидация H₂
+    на 8 исторических событиях
+  </p>
+
+  <!-- ============ БЛОК H₁ ============ -->
+  <section class="hypothesis-block">
+    <h2>
+      H₁: хвостовое доминирование
+      <span class="hyp-formula">K_q<sup>(centered)</sup></span>
+      над стохастически-применимыми бейзлайнами
+    </h2>
+    <p class="hyp-subtitle">
+      Новая центрированная CVaR-метрика с paired Common Random Numbers
+      улавливает риск в «хвосте» (редкие тяжёлые каскады) сильнее
+      динамического DIIM Лиан-Хаймса (2006) и нелинейного DebtRank
+      Баттистона (2012).
+    </p>
+
+    <div class="method-step">
+      <div class="step-circle">1</div>
+      <div class="step-text">
+        <strong>Фиксация каталога.</strong> 29 сценариев
+        (<span class="formula">12 M* + 4 out_M* + 13 hist</span>),
+        по каждому — пара инициатор × получатель
+        <span class="formula">(SID × i_recv)</span>
+        в 5-секторной модели NIS2.
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">2</div>
+      <div class="step-text">
+        <strong>Параметрический эксперимент на стенде (REST-цепочка).</strong>
+        На каждом сценарии варьируем (α<sub>инициатор</sub>, θ<sub>узла</sub>,
+        сектор-инициатор), детерминированный
+        <span class="formula">seed = SHA-256(SID‖i_recv‖r) mod 2³²</span>,
+        N = 5 000 траекторий, T = 60 шагов; прогон через
+        <span class="formula">POST /api/v1/simulator/research_run</span>.
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">3</div>
+      <div class="step-text">
+        <strong>Вычисление 4 метрик.</strong> Для каждой пары параллельно
+        считаем
+        <span class="formula">K<sup>(cl_IIM)</sup></span> (методологический
+        контекст),
+        <span class="formula">K<sup>(DIIM)</sup></span>,
+        <span class="formula">K<sup>(DR)</sup></span>,
+        <span class="formula">K_q<sup>(centered)</sup></span>
+        с paired Common Random Numbers (METHODOLOGY § 3.4) на уровне
+        <span class="formula">α_tail = 0,05</span>.
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">4</div>
+      <div class="step-text">
+        <strong>Парный bootstrap.</strong> B = 10 000 бутстрэп-итераций
+        разностей
+        <span class="formula">Δ_b = K_q<sup>(centered)</sup> − K<sup>(DIIM)</sup></span>,
+        <span class="formula">Δ_c = K_q<sup>(centered)</sup> − K<sup>(DR)</sup></span>
+        с 95 %-парным CI на каждую из 29 пар.
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">5</div>
+      <div class="step-text">
+        <strong>Контроль множественности.</strong> Поправка
+        Холма-Бонферрони на двух-семейный набор
+        <span class="formula">m = 2 · 29 = 58</span> индивидуальных тестов,
+        <span class="formula">FWER = 0,05</span>.
+      </div>
+    </div>
+
+    <div class="acceptance-criterion">
+      <div class="ac-title">КРИТЕРИЙ ПРИНЯТИЯ / ОТКЛОНЕНИЯ</div>
+      <ul>
+        <li class="accept">
+          <strong>Семейная H₁<sup>(ВКР)</sup> принимается</strong>, если
+          каждая подгипотеза выполнена на ≥
+          <span class="formula">⌊0,9 · 29⌋ = 26</span> пар каталога:
+          <strong>H₁<sup>(b)</sup></strong>:
+          <span class="formula">CI_lo(Δ_b) > 0</span> на 26 парах ·
+          <strong>H₁<sup>(c)</sup></strong>:
+          <span class="formula">CI_lo(Δ_c) > 0</span> на 26 парах ·
+          после Холма-Бонферрони <span class="formula">m = 58</span> при
+          <span class="formula">FWER = 0,05</span>.
+        </li>
+        <li class="accept">
+          Сравнение с равновесным IIM Хаймса-Сантоса
+          (<span class="formula">Δ_a</span>) — методологический контекст
+          о взаимодополнительности equilibrium-методов; в формальную
+          семейную гипотезу не входит.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ БЛОК H₂ ============ -->
+  <section class="hypothesis-block">
+    <h2>H₂: валидность на исторических событиях</h2>
+    <p class="hyp-subtitle">
+      Методика воспроизводит реальный исход 8 задокументированных
+      кросс-отраслевых каскадных инцидентов двух подгрупп — базовой
+      3-секторной и расширенной ИКТ/healthcare.
+    </p>
+
+    <div class="method-step">
+      <div class="step-circle">1</div>
+      <div class="step-text">
+        <strong>Калибровка по первоисточникам.</strong> 8 событий двух
+        подгрупп: базовая 3-секторная (Baltimore 2024, Texas 2021,
+        India 2012, UCTE 2006) и расширенная ИКТ/healthcare (T-Mobile 2020,
+        CenturyLink 2018, Change Healthcare 2024, Mumbai 2017). Секторные
+        параметры извлекаются из 8 регуляторных отчётов: Nature
+        Communications, FERC-NERC, CEA India, UCTE Inquiry, FCC DA 21-261,
+        FCC Public Notice, UnitedHealth 8-K + HIPAA Journal,
+        Maharashtra Commission.
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">2</div>
+      <div class="step-text">
+        <strong>Backward-fit-эксперимент.</strong> Прогон каждого события
+        через стенд (REST-цепочка) с параметрами «как было» и
+        фиксированным <span class="formula">seed</span> через
+        <span class="formula">POST /api/v1/simulator/research_run</span>.
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">3</div>
+      <div class="step-text">
+        <strong>Извлечение результирующего профиля.</strong> Медианный
+        <span class="formula">δ_i</span> по N траекториям для каждого
+        вовлечённого сектора <span class="formula">i</span> (5 секторов:
+        e — energy, w — water, τ — transport, ICT, Q — healthcare).
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">4</div>
+      <div class="step-text">
+        <strong>Классификация.</strong> Сопоставление
+        <span class="formula">δ_i</span> с задокументированной реальностью
+        (✓ / ✗ по качественному совпадению degraded-модели и
+        degraded-факта).
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-circle">5</div>
+      <div class="step-text">
+        <strong>Три числовых критерия (вектор по 4 метрикам).</strong>
+        <span class="formula">C₁</span> — качество каскада (8 событий
+        целиком); <span class="formula">C₂</span> — качество по
+        <span class="formula">8 × 4 = 32</span> секторным ячейкам
+        (4 неинициирующих сектора на событие);
+        <span class="formula">MAE</span> — средняя абсолютная ошибка
+        хвостовой метрики.
+      </div>
+    </div>
+
+    <div class="acceptance-criterion">
+      <div class="ac-title">КРИТЕРИЙ ПРИНЯТИЯ / ОТКЛОНЕНИЯ</div>
+      <ul>
+        <li class="accept">
+          <strong>H₂ принята</strong>, если выполнены все три:
+          <span class="formula">C₁ = 8/8 ∧ C₂ = 32/32 ∧ MAE ≤ 0,25</span>.
+        </li>
+        <li class="reject">
+          <strong>H₂ отклонена</strong>, если нарушен хотя бы один
+          критерий — методика не верифицирована эмпирически и не может
+          быть рекомендована к применению в строгой векторной форме.
+        </li>
+        <li class="accept">
+          Текущий результат: <strong>MAE ≤ 0,25 для всех 4 метрик ✓</strong>;
+          векторный <span class="formula">C₂ = 32/32</span> не выполнен на
+          расширенной подгруппе ИКТ/healthcare — направление развития
+          § 4.3.1 (операционная калибровка
+          <span class="formula">σ_ICT</span>,
+          <span class="formula">σ_Q</span>).
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="footer-note">
+    Источники: METHODOLOGY § 2.4–2.10;
+    <code>results/b_full/baselines_comparison_v23_b_full.json</code>
+    (production REST-серия 29 пар) +
+    <code>results/h2_baseline_comparison_v23c.json</code> (32 ячейки H₂) +
+    <code>results/b_full/specificity_centered_v23_b_full.json</code>
+    (200 null-сценариев + Clopper–Pearson exact CI).
+    Ветка стенда: <code>b-full-5sector-rest</code>.
+  </p>
+
+</main>
+
+</body>
+</html>
